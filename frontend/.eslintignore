@@ -1,0 +1,18 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore build and distribution directories
+build/
+dist/
+
+# Ignore compiled or minified files
+*.min.js
+*.min.css
+
+# Ignore log and temporary files
+*.log
+.tmp/
+
+# Ignore specific files or directories
+config.js
+secret/

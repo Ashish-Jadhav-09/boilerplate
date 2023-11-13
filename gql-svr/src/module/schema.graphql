@@ -1,0 +1,14 @@
+type Query {
+  getUserData(role: String): [user]
+}
+
+type Mutation {
+  login(input: login): loginUser
+  registerUser(input: UsersData): users
+}
+
+type Subscription {
+  userAdded: user
+  userUpdated: user
+  userDeleted: user
+}

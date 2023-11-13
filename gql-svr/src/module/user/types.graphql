@@ -1,0 +1,49 @@
+type token {
+  token: String
+  user: user
+}
+
+type loginUser {
+  message: String
+  data: token
+  status: Int
+}
+
+input login {
+  email: String
+  password: String
+}
+
+type users {
+  message: String
+  data: user
+  status: Int
+}
+
+type user {
+  originalId: String
+  createdAt: String
+  deletedAt: String
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+  role: String
+}
+
+input UsersData  {
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+  role: String
+}
+
+type User {
+  originalId: String
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+  role: String
+}
