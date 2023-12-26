@@ -1,57 +1,108 @@
 import React, { useState } from "react";
 import {
-  Avatar,
   Box,
   Button,
   Container,
   CssBaseline,
   Grid,
+  IconButton,
   TextField,
   Typography,
 } from "@mui/material";
-import Link from '@mui/material/Link';
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Link from "@mui/material/Link";
 import { useSnackbar } from "../../context";
 import { useNavigate } from "react-router-dom";
 import { REGISTER_USER } from "../../apolloClient/mutation";
 import { useMutation } from "@apollo/client";
-
-const Copyright = (props) => {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-};
+import { content } from "./content";
+import { registerUserValidationSchema } from "./helper";
+import { Person, Email, Visibility, VisibilityOff } from "@mui/icons-material";
 
 const RegisterUser = () => {
+  const [registerUser] = useMutation(REGISTER_USER);
+  const navigation = useNavigate();
+  const snackBar = useSnackbar();
+
   const [formValues, setFormValues] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
+    isTouched: {},
+    error: {},
+    isDisabled: true,
+    showPassword: false,
+    showConfirmPassword: false,
   });
 
-  const [registerUser] = useMutation(REGISTER_USER);
-  const navigation = useNavigate();
-  const snackBar = useSnackbar();
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword,
+    isTouched,
+    error,
+    isDisabled,
+    showPassword,
+    showConfirmPassword,
+  } = formValues;
+
+  const handleError = (values) => {
+    registerUserValidationSchema
+      .validate(
+        {
+          ...values,
+        },
+        { abortEarly: false }
+      )
+      .then(() => {
+        setFormValues({
+          ...values,
+          error: {},
+          isDisabled: false,
+        });
+      })
+      .catch((allErrors) => {
+        const schemaErrors = {};
+        if (allErrors) {
+          allErrors.inner.forEach((err) => {
+            schemaErrors[err.path] = err.message;
+          });
+          setFormValues({
+            ...values,
+            error: schemaErrors,
+            isDisabled: true,
+          });
+        }
+      });
+  };
+
+  const handleOnBlur = (field) => {
+    const temp = {
+      ...formValues,
+      isTouched: { ...formValues.isTouched, [field]: true },
+    };
+    setFormValues(temp);
+    handleError(temp);
+  };
+
+  const getError = (type) => {
+    if (isTouched[type]) {
+      return error[type] || "";
+    }
+    return "";
+  };
 
   const handleOnChange = (field, event) => {
-    setFormValues({
+    const temp = {
       ...formValues,
+      isTouched: { ...formValues.isTouched, [field]: true },
       [field]: event.target.value,
-    });
+    };
+    setFormValues(temp);
+    handleError(temp);
   };
 
   const handleSubmit = async () => {
@@ -77,7 +128,6 @@ const RegisterUser = () => {
             },
           },
         });
-        console.log('output.data.registerUser.status', output?.data?.registerUser);
         if (output?.data?.registerUser?.status === 200) {
           snackBar(
             `${output.data.registerUser.data.firstName} your account has been created successfully`,
@@ -99,117 +149,218 @@ const RegisterUser = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
-        <Box sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="given-name"
-                name="firstName"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-                onChange={(event) => handleOnChange("firstName", event)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="family-name"
-                autoFocus
-                onChange={(event) => handleOnChange("lastName", event)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                onChange={(event) => handleOnChange("email", event)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-                autoFocus
-                onChange={(event) => handleOnChange("password", event)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="confirmPassword"
-                label="Confirm Password"
-                type="password"
-                id="confirmPassword"
-                autoComplete="current-password"
-                autoFocus
-                onChange={(event) => handleOnChange("confirmPassword", event)}
-                error={
-                  formValues.confirmPassword &&
-                  formValues.password !== formValues.confirmPassword
-                }
-                helperText={
-                  formValues.confirmPassword &&
-                  formValues.password !== formValues.confirmPassword
-                    ? "password must be same"
-                    : ""
-                }
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={handleSubmit}
+    <Grid
+      container
+      component="main"
+      sx={{
+        height: "100vh",
+        backgroundImage: "url(https://source.unsplash.com/random?wallpapers)",
+        backgroundRepeat: "no-repeat",
+        backgroundColor: (t) =>
+          t.palette.mode === "light" ? t.palette.grey[50] : t.palette.grey[900],
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Box
+            sx={{
+              mt: 3,
+              backgroundColor: "rgba(255, 255, 255, 0.5)",
+              backdropFilter: "blur(8px)",
+              padding: 3,
+              borderRadius: 3,
+            }}
           >
-            Sign Up
-          </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="/" variant="body2">
-                Already have an account? Sign in
-              </Link>
+            <Typography
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                fontSize: 30,
+                mb: 1,
+              }}
+            >
+              {content.SIGN_UP}
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  value={firstName}
+                  onChange={(event) => handleOnChange("firstName", event)}
+                  onBlur={() => handleOnBlur("firstName")}
+                  error={Boolean(getError("firstName"))}
+                  helperText={getError("firstName")}
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton>
+                        <Person />
+                      </IconButton>
+                    ),
+                  }}
+                  sx={{
+                    backgroundColor: "transparent",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Last Name"
+                  name="lastName"
+                  value={lastName}
+                  onChange={(event) => handleOnChange("lastName", event)}
+                  onBlur={() => handleOnBlur("lastName")}
+                  error={Boolean(getError("lastName"))}
+                  helperText={getError("lastName")}
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton>
+                        <Person />
+                      </IconButton>
+                    ),
+                  }}
+                  sx={{
+                    backgroundColor: "transparent",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  value={email}
+                  onChange={(event) => handleOnChange("email", event)}
+                  onBlur={() => handleOnBlur("email")}
+                  error={Boolean(getError("email"))}
+                  helperText={getError("email")}
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton>
+                        <Email />
+                      </IconButton>
+                    ),
+                  }}
+                  sx={{
+                    backgroundColor: "transparent",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  id="password"
+                  value={password}
+                  onChange={(event) => handleOnChange("password", event)}
+                  onBlur={() => handleOnBlur("password")}
+                  error={Boolean(getError("password"))}
+                  helperText={getError("password")}
+                  type={showPassword ? "text" : "password"}
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton
+                        onClick={() =>
+                          setFormValues({
+                            ...formValues,
+                            showPassword: !showPassword,
+                          })
+                        }
+                        onMouseDown={(event) => event.preventDefault()}
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    ),
+                  }}
+                  sx={{
+                    backgroundColor: "transparent",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(event) => handleOnChange("confirmPassword", event)}
+                  onBlur={() => handleOnBlur("confirmPassword")}
+                  error={confirmPassword && password !== confirmPassword}
+                  helperText={
+                    confirmPassword && password !== confirmPassword
+                      ? "password must be same"
+                      : ""
+                  }
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton
+                        onClick={() =>
+                          setFormValues({
+                            ...formValues,
+                            showConfirmPassword: !showConfirmPassword,
+                          })
+                        }
+                        onMouseDown={(event) => event.preventDefault()}
+                      >
+                        {showConfirmPassword ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </IconButton>
+                    ),
+                  }}
+                  sx={{
+                    backgroundColor: "transparent",
+                  }}
+                />
+              </Grid>
             </Grid>
-          </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              disabled={isDisabled}
+              onClick={handleSubmit}
+            >
+              {content.SIGN_UP}
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href="/" variant="body2">
+                  {content.ALREADY_HAVE_ACCOUNT}
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
         </Box>
-      </Box>
-      <Copyright sx={{ mt: 5 }} />
-    </Container>
+      </Container>
+    </Grid>
   );
 };
 

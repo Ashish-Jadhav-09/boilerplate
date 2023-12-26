@@ -10,7 +10,6 @@ import {
 } from '@mui/material';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { LoadingButton } from '@mui/lab';
 import { DELETE_USER } from '../../apolloClient/mutation';
 import { useSnackbar } from '../../context';
 
@@ -69,13 +68,13 @@ const DeleteUser = (props) => {
         </DialogContentText>
         <br />
         <DialogActions>
-          <LoadingButton
+          <Button
             variant="contained"
             loading={loading}
             onClick={() => handleOnSubmit(data.originalId)}
           >
             Delete
-          </LoadingButton>
+          </Button>
           <Button variant="outlined" onClick={onClose}>
             Cancel
           </Button>

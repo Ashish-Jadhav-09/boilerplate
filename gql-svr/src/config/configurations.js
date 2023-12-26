@@ -1,11 +1,11 @@
-import { config } from "dotenv";
+import { config } from 'dotenv';
 
-import Joi from "joi";
+import Joi from 'joi';
 
 config();
 
 const envVarsSchema = Joi.object({
-  NODE_ENV: Joi.string().default("development"),
+  NODE_ENV: Joi.string().default('development'),
   PORT: Joi.number().default(9001),
 })
   .unknown()

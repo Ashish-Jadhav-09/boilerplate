@@ -102,10 +102,10 @@ const GenericTable = (props) => {
                   onClick={() =>
                     (dataItem?.url)
                       ? window.open(
-                          dataItem?.url,
-                          '_blank',
-                          'noreferrer'
-                        )
+                        dataItem?.url,
+                        '_blank',
+                        'noreferrer'
+                      )
                       : ''
                   }
                 >

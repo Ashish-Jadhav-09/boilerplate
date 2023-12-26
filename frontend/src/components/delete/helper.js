@@ -1,20 +1,20 @@
 export const loadingButton = {
-    backgroundColor: 'black',
+  backgroundColor: 'black',
+  color: 'white',
+  borderColor: '#0063cc',
+  '&:hover': {
     color: 'white',
-    borderColor: '#0063cc',
-    '&:hover': {
-      color: 'white',
-      backgroundColor: 'black',
-      borderColor: 'black',
-    },
-  };
+    backgroundColor: 'black',
+    borderColor: 'black',
+  },
+};
 
-  export const cancelButton = {
+export const cancelButton = {
+  color: 'black',
+  borderColor: '#0063cc',
+  '&:hover': {
     color: 'black',
-    borderColor: '#0063cc',
-    '&:hover': {
-      color: 'black',
-      borderColor: '#262626',
-    },
-  };
+    borderColor: '#262626',
+  },
+};
   

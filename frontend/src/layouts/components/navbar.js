@@ -101,43 +101,43 @@ const NavBar = () => {
               {JSON.parse(localStorage.getItem("user")).role.toLowerCase() ===
               "admin"
                 ? adminPages.map((element, index) => (
-                    <MenuItem
-                      key={`adminPages${index + 1}`}
-                      onClick={handleCloseNavMenu}
-                    >
-                      <Link style={{ textDecoration: "none" }} to={element.url}>
-                        <Typography
-                          component="div"
-                          style={{
-                            color: "black",
-                            textDecoration: "none",
-                            textAlign: "center",
-                          }}
-                        >
-                          {element.page}
-                        </Typography>
-                      </Link>
-                    </MenuItem>
-                  ))
+                  <MenuItem
+                    key={`adminPages${index + 1}`}
+                    onClick={handleCloseNavMenu}
+                  >
+                    <Link style={{ textDecoration: "none" }} to={element.url}>
+                      <Typography
+                        component="div"
+                        style={{
+                          color: "black",
+                          textDecoration: "none",
+                          textAlign: "center",
+                        }}
+                      >
+                        {element.page}
+                      </Typography>
+                    </Link>
+                  </MenuItem>
+                ))
                 : pages.map((element, index) => (
-                    <MenuItem
-                      key={`pages${index + 1}`}
-                      onClick={handleCloseNavMenu}
-                    >
-                      <Link style={{ textDecoration: "none" }} to={element.url}>
-                        <Typography
-                          component="div"
-                          style={{
-                            color: "black",
-                            textDecoration: "none",
-                            textAlign: "center",
-                          }}
-                        >
-                          {element.page}
-                        </Typography>
-                      </Link>
-                    </MenuItem>
-                  ))}
+                  <MenuItem
+                    key={`pages${index + 1}`}
+                    onClick={handleCloseNavMenu}
+                  >
+                    <Link style={{ textDecoration: "none" }} to={element.url}>
+                      <Typography
+                        component="div"
+                        style={{
+                          color: "black",
+                          textDecoration: "none",
+                          textAlign: "center",
+                        }}
+                      >
+                        {element.page}
+                      </Typography>
+                    </Link>
+                  </MenuItem>
+                ))}
             </Menu>
           </Box>
           <Typography
@@ -161,43 +161,43 @@ const NavBar = () => {
             {JSON.parse(localStorage.getItem("user")).role.toLowerCase() ===
             "admin"
               ? adminPages.map((element, index) => (
-                  <MenuItem
-                    key={`adminPages${index + 1}`}
-                    onClick={handleCloseNavMenu}
-                  >
-                    <Link style={{ textDecoration: "none" }} to={element.url}>
-                      <Typography
-                        component="div"
-                        style={{
-                          color: "white",
-                          textDecoration: "none",
-                          textAlign: "center",
-                        }}
-                      >
-                        {element.page}
-                      </Typography>
-                    </Link>
-                  </MenuItem>
-                ))
+                <MenuItem
+                  key={`adminPages${index + 1}`}
+                  onClick={handleCloseNavMenu}
+                >
+                  <Link style={{ textDecoration: "none" }} to={element.url}>
+                    <Typography
+                      component="div"
+                      style={{
+                        color: "white",
+                        textDecoration: "none",
+                        textAlign: "center",
+                      }}
+                    >
+                      {element.page}
+                    </Typography>
+                  </Link>
+                </MenuItem>
+              ))
               : pages.map((element, index) => (
-                  <MenuItem
-                    key={`pages${index + 1}`}
-                    onClick={handleCloseNavMenu}
-                  >
-                    <Link style={{ textDecoration: "none" }} to={element.url}>
-                      <Typography
-                        component="div"
-                        style={{
-                          color: "white",
-                          textDecoration: "none",
-                          textAlign: "center",
-                        }}
-                      >
-                        {element.page}
-                      </Typography>
-                    </Link>
-                  </MenuItem>
-                ))}
+                <MenuItem
+                  key={`pages${index + 1}`}
+                  onClick={handleCloseNavMenu}
+                >
+                  <Link style={{ textDecoration: "none" }} to={element.url}>
+                    <Typography
+                      component="div"
+                      style={{
+                        color: "white",
+                        textDecoration: "none",
+                        textAlign: "center",
+                      }}
+                    >
+                      {element.page}
+                    </Typography>
+                  </Link>
+                </MenuItem>
+              ))}
           </Box>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="info" style={{ marginRight: '15px' }}>

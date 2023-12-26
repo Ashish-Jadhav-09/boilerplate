@@ -11,12 +11,12 @@ const App = () => {
     <div style={{ backgroundColor: '#f5f5f0' }}>
       <ErrorBoundry>
         <ApolloProvider client={client}>
-            <SnackBarProvider>
-              <Typography>
-                <CssBaseline />
-                <PrivateRoute />
-              </Typography>
-            </SnackBarProvider>
+          <SnackBarProvider>
+            <Typography>
+              <CssBaseline />
+              <PrivateRoute />
+            </Typography>
+          </SnackBarProvider>
         </ApolloProvider>
       </ErrorBoundry>
     </div>
