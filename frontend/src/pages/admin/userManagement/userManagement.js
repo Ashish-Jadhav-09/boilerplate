@@ -1,4 +1,6 @@
-import React, { useState, useEffect, lazy, Suspense, useCallback } from "react";
+import React, {
+  useState, useEffect, lazy, Suspense, useCallback,
+} from 'react';
 import {
   Button,
   Card,
@@ -6,28 +8,24 @@ import {
   Grid,
   Tooltip,
   Typography,
-} from "@mui/material";
-import { useQuery } from "@apollo/client";
-import { Edit, Delete, Search } from "@mui/icons-material";
+} from '@mui/material';
+import { useQuery } from '@apollo/client';
+import { Edit, Delete, Search } from '@mui/icons-material';
 import {
   userManagementSearchBar,
   addUserButton,
   userManagementTableColumn,
-} from "./helper";
-import {
-  GET_ALL_USERS,
-} from "../../../apolloClient";
+} from './helper';
+import { GET_ALL_USERS } from '../../../apolloClient';
 import {
   SearchBar,
   SearchIconWrapper,
   StyledInputBase,
-} from "../adminDashboard/helper";
-import { handleOnTableDataSort } from "../../../config/constant";
+} from '../adminDashboard/helper';
+import { handleOnTableDataSort } from '../../../config/constant';
 
-const GenericTable = lazy(() =>
-  import("../../../components/table/genericTable")
-);
-const AddSingleUser = lazy(() => import("./addSingleUser"));
+const GenericTable = lazy(() => import('../../../components/table/genericTable'));
+const AddSingleUser = lazy(() => import('./addSingleUser'));
 
 const EditIcon = () => (
   <Tooltip title="Edit User">
@@ -39,16 +37,16 @@ const DeleteIcon = () => (
   <Tooltip title="Delete User">
     <Delete />
   </Tooltip>
-)
+);
 
 const UserManagement = () => {
   const [userTableData, setUserTableData] = useState([]);
   const [isDialogOpen, setisDialogOpen] = useState(false);
   const [userEditDialog, setUserEditDialog] = useState(false);
   const [userRemoveDialog, setUserRemoveDialog] = useState(false);
-  const [filterData, setFilterdata] = useState("");
-  const [order, setSortOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("status");
+  const [filterData, setFilterdata] = useState('');
+  const [order, setSortOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('status');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -65,18 +63,18 @@ const UserManagement = () => {
     setOrderBy(value);
     const tableDataSort = handleOnTableDataSort(orderBy, order);
     userTableData.sort(tableDataSort);
-    if (order === "asc") {
-      setSortOrder("desc");
+    if (order === 'asc') {
+      setSortOrder('desc');
     } else {
-      setSortOrder("asc");
+      setSortOrder('asc');
     }
   };
 
   const { data = {}, refetch } = useQuery(GET_ALL_USERS, {
     variables: {
-      role: "general",
+      role: 'general',
     },
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
   });
 
   console.log('data', data);
@@ -85,10 +83,7 @@ const UserManagement = () => {
     setUserTableData(data?.getUserData);
   }, [data?.getUserData]);
 
-  const getFilterData = () =>
-    data?.getUserData?.filter((element) =>
-      element.firstName.toLowerCase().includes(filterData.toLowerCase())
-    );
+  const getFilterData = () => data?.getUserData?.filter((element) => element.firstName.toLowerCase().includes(filterData.toLowerCase()));
 
   useEffect(() => {
     refetch();
@@ -96,7 +91,7 @@ const UserManagement = () => {
 
   return (
     <>
-      <h2 style={{ marginLeft: "2rem", fontSize: "2rem" }}>User Management </h2>
+      <h2 style={{ marginLeft: '2rem', fontSize: '2rem' }}>User Management </h2>
       <Suspense fallback={<div>Loading....</div>}>
         <AddSingleUser
           open={isDialogOpen}
@@ -104,8 +99,7 @@ const UserManagement = () => {
           onSubmit={() => setisDialogOpen(false)}
         />
       </Suspense>
-      <Suspense fallback={<div>Loading....</div>}>
-      </Suspense>
+      <Suspense fallback={<div>Loading....</div>} />
       <Grid
         container
         direction="row"
@@ -119,11 +113,11 @@ const UserManagement = () => {
             </SearchIconWrapper>
             <StyledInputBase
               id="outlined-basic"
-              sx={{ borderBottom: "1px solid" }}
+              sx={{ borderBottom: '1px solid' }}
               label="search"
               variant="outlined"
               placeholder="User Name"
-              inputProps={{ "aria-label": "search" }}
+              inputProps={{ 'aria-label': 'search' }}
               onChange={(event) => {
                 setFilterdata(event.target.value.trim());
               }}
@@ -143,9 +137,9 @@ const UserManagement = () => {
       <Suspense fallback={<div>Loading....</div>}>
         <Card
           style={{
-            display: "flex",
-            flexDirection: "column",
-            margin: "1rem 1rem 1rem 1rem",
+            display: 'flex',
+            flexDirection: 'column',
+            margin: '1rem 1rem 1rem 1rem',
           }}
         >
           <CardContent>

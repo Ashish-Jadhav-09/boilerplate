@@ -1,5 +1,6 @@
-import pubsub from "../pubsub";
-import { ADDUSER } from "../../libs/constant";
+import pubsub from '../pubsub';
+import { ADDUSER } from '../../libs/constant';
+
 export default {
   registerUser: async (_, { input }, { dataSources: { userApi } }) => {
     try {
@@ -9,7 +10,8 @@ export default {
       });
       return data;
     } catch (error) {
-      console.log("add user data error ::", error);
+      console.log('CATCH BLOCK : Module : User : Mutation : registerUser =>', error);
+      return error;
     }
   },
 
@@ -18,7 +20,8 @@ export default {
       const { email, password } = input;
       return await userApi.loginUser({ email, password });
     } catch (error) {
-      console.log("Login error :::", error);
+      console.log('CATCH BLOCK : Module : User : Mutation : login =>', error);
+      return error;
     }
   },
 };

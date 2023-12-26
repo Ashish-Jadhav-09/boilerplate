@@ -4,7 +4,8 @@ export default {
       const respose = await userApi.getUserData(role);
       return respose?.data;
     } catch (error) {
-      console.log("get user data error ::", error);
+      console.log('CATCH BLOCK : Module : User : Query : getUserData =>', error);
+      return error;
     }
   },
 };

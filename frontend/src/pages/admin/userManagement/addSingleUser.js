@@ -112,10 +112,13 @@ const AddSingleUser = (props) => {
         onSubmit();
         snackBar("Successfully Added User", "success");
       } else {
-        console.log("CATCH BLOCK : in addSingUser.js .then => ", err);
+        console.log("CATCH BLOCK : in addSingUser.js .then => ");
         onSubmit();
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log("CATCH BLOCK : in addSingUser.js .then => ");
+      onSubmit();
+    }
   };
   return (
     <Dialog open={open}>

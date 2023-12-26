@@ -12,7 +12,6 @@ import {
   InputAdornment,
   Divider,
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
 import { useMutation } from "@apollo/client";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
@@ -40,7 +39,6 @@ const EditUser = (props) => {
 
   const [editFormValues, setEditFormValues] = useState(initialState);
 
-  console.log("editFormValues", editFormValues);
   const { firstName, lastName, email, password, isTouched, error } =
     editFormValues;
 
@@ -257,7 +255,7 @@ const EditUser = (props) => {
         <Button sx={editUserCancelButton} onClick={onClose}>
           Cancel
         </Button>
-        <LoadingButton
+        <Button
           sx={editUserSubmitButton}
           variant="contained"
           loading={loading}
@@ -271,7 +269,7 @@ const EditUser = (props) => {
           }
         >
           Submit
-        </LoadingButton>
+        </Button>
         <Divider />
       </DialogActions>
     </Dialog>
