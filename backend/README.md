@@ -21,10 +21,10 @@ To set up the backend of the web application, follow these steps:
 1. Navigate to the Frontend Directory: 
    ```bash
     cd backend
-3. Install the project dependencies:
+2. Install the project dependencies:
 
     ```bash
     npm install
-4. Start the development server:
+3. Start the development server:
     ```bash
     npm start
