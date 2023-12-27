@@ -1,0 +1,185 @@
+import React, { Suspense, lazy, useRef, useState } from "react";
+import PropTypes from "prop-types";
+import { useTheme } from "@mui/material/styles";
+import {
+  Avatar,
+  Box,
+  ButtonBase,
+  CardContent,
+  CircularProgress,
+  ClickAwayListener,
+  Grid,
+  IconButton,
+  Paper,
+  Popper,
+  Stack,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
+import { LogoutOutlined, SettingsOutlined, Person } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { tabCss, tabIconCss, menuPaperCss } from "./helper";
+import { content } from "./content";
+
+const ProfileTab = lazy(() => import("./profileSection"));
+const SettingTab = lazy(() => import("./settingsSection"));
+const MainCard = lazy(() => import("../../components/mainCard/mainCard"));
+const TabPanel = lazy(() => import("../../components/tabPanel/tabPanel"));
+
+const Profile = (props) => {
+  const { anchorElUser, handleCloseUserMenu } = props;
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const anchorRef = useRef(null);
+
+  const [value, setValue] = useState(0);
+
+  const handleLogout = async () => {
+    localStorage.clear();
+    navigate("/", { replace: true });
+  };
+
+  const handleClose = (event) => {
+    if (!anchorRef?.current?.contains(event.target)) {
+      handleCloseUserMenu();
+    }
+  };
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userName = `${user.firstName} ${user.lastName}`;
+
+  return (
+    <Box sx={{ flexShrink: 0, ml: 0.75 }}>
+      <ButtonBase
+        sx={{
+          p: 0.25,
+          bgcolor: anchorElUser ? "grey.300" : "transparent",
+          borderRadius: 1,
+          "&:hover": { bgcolor: "secondary.lighter" },
+        }}
+        aria-label="open profile"
+        ref={anchorRef}
+        aria-controls={anchorElUser ? "profile-grow" : undefined}
+        aria-haspopup="true"
+      >
+        <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
+          <Avatar alt={userName} src={userName}>
+            {`${user.firstName.charAt(0)}${user.lastName.charAt(0)}`}
+          </Avatar>
+          <Typography variant="subtitle1" color="white">
+            {userName}
+          </Typography>
+        </Stack>
+      </ButtonBase>
+      <Popper
+        placement="bottom-end"
+        open={Boolean(anchorElUser)}
+        anchorEl={anchorRef.current}
+        style={{
+          marginTop: "10px",
+        }}
+      >
+        {Boolean(anchorElUser) && (
+          <Paper
+            sx={{
+              ...menuPaperCss,
+              [theme.breakpoints.down("md")]: {
+                maxWidth: 250,
+              },
+            }}
+          >
+            <ClickAwayListener onClickAway={handleClose}>
+              <Suspense fallback={<CircularProgress />}>
+                <MainCard elevation={0} border={false} content={false}>
+                  <CardContent sx={{ px: 2.5, pt: 3 }}>
+                    <Grid
+                      container
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Grid item>
+                        <Stack
+                          direction="row"
+                          spacing={1.25}
+                          alignItems="center"
+                        >
+                          <Avatar alt={userName} src={userName}>
+                            {`${user.firstName.charAt(0)}${user.lastName.charAt(
+                              0
+                            )}`}
+                          </Avatar>
+                          <Stack>
+                            <Typography variant="h6">{userName}</Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              {user.role.charAt(0).toUpperCase() +
+                                user.role.slice(1)}
+                            </Typography>
+                          </Stack>
+                        </Stack>
+                      </Grid>
+                      <Grid item>
+                        <IconButton size="large" onClick={handleLogout}>
+                          <LogoutOutlined />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                  {Boolean(anchorElUser) && (
+                    <>
+                      <Tabs
+                        variant="fullWidth"
+                        value={value}
+                        onChange={handleChange}
+                        aria-label="profile tabs"
+                      >
+                        <Tab
+                          sx={tabCss}
+                          icon={<Person style={tabIconCss} />}
+                          label={content.PROFILE_LABEL}
+                          value={0}
+                        />
+                        <Tab
+                          sx={tabCss}
+                          icon={<SettingsOutlined style={tabIconCss} />}
+                          label={content.SETTINGS_LABEL}
+                          value={1}
+                        />
+                      </Tabs>
+                      <TabPanel value={value} index={0}>
+                        <Suspense fallback={<CircularProgress />}>
+                          <ProfileTab handleLogout={handleLogout} />
+                        </Suspense>
+                      </TabPanel>
+                      <TabPanel value={value} index={1}>
+                        <Suspense fallback={<CircularProgress />}>
+                          <SettingTab />
+                        </Suspense>
+                      </TabPanel>
+                    </>
+                  )}
+                </MainCard>
+              </Suspense>
+            </ClickAwayListener>
+          </Paper>
+        )}
+      </Popper>
+    </Box>
+  );
+};
+
+Profile.defaultProps = {
+  anchorElUser: false,
+  handleCloseUserMenu: () => {},
+};
+
+Profile.propTypes = {
+  anchorElUser: PropTypes.bool,
+  handleCloseUserMenu: PropTypes.func,
+};
+
+export default Profile;

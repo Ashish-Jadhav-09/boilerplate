@@ -9,8 +9,10 @@ export default async (request: any, response: Response, next: NextFunction) => {
     const { jwt_secret } = configuration;
 
     if (token) {
-      const decodedToken = jwt.verify(token, jwt_secret);
-      const userExists = await userRepository.findOneUser({ id: decodedToken });
+      const decodedToken: any = jwt.verify(token, jwt_secret);
+      const userExists = await userRepository.findOneUser({
+        originalId: decodedToken?.data?.originalId,
+      });
       if (!userExists) {
         next({
           error: "not exits",
@@ -21,7 +23,7 @@ export default async (request: any, response: Response, next: NextFunction) => {
       request.user = decodedToken;
       next();
     } else {
-      response.status(200).send({
+      response.status(404).send({
         message: "Token Not Found",
         status: 404,
       });
