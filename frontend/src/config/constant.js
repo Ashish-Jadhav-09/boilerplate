@@ -16,6 +16,9 @@ export const routes = {
   PROFILE: "/profile",
   SUPPORT: "/support",
   ACCOUNT_SETTINGS: "/account-settings",
+  LOGIN: '/',
+  REGISTER_USER: '/register-user',
+  NOT_FOUND_ROUTE: '/*',
 };
 
 export const adminPages = [
@@ -39,4 +42,7 @@ export const userPages = [
 export const constants = {
   admin: "admin",
   user: "user",
+  general: "general",
+  success: "success",
+  error: "error",
 };

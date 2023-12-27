@@ -1,5 +1,4 @@
 import React, { Suspense, lazy, useRef, useState } from "react";
-import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import {
   Avatar,
@@ -27,13 +26,13 @@ const SettingTab = lazy(() => import("./settingsSection"));
 const MainCard = lazy(() => import("../../components/mainCard/mainCard"));
 const TabPanel = lazy(() => import("../../components/tabPanel/tabPanel"));
 
-const Profile = (props) => {
-  const { anchorElUser, handleCloseUserMenu } = props;
+const Profile = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const anchorRef = useRef(null);
 
   const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
 
   const handleLogout = async () => {
     localStorage.clear();
@@ -41,9 +40,14 @@ const Profile = (props) => {
   };
 
   const handleClose = (event) => {
-    if (!anchorRef?.current?.contains(event.target)) {
-      handleCloseUserMenu();
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
     }
+    setOpen(false);
+  };
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
   };
 
   const handleChange = (event, newValue) => {
@@ -58,14 +62,15 @@ const Profile = (props) => {
       <ButtonBase
         sx={{
           p: 0.25,
-          bgcolor: anchorElUser ? "grey.300" : "transparent",
+          bgcolor: open ? "grey.300" : "transparent",
           borderRadius: 1,
           "&:hover": { bgcolor: "secondary.lighter" },
         }}
         aria-label="open profile"
         ref={anchorRef}
-        aria-controls={anchorElUser ? "profile-grow" : undefined}
+        aria-controls={open ? "profile-grow" : undefined}
         aria-haspopup="true"
+        onClick={handleToggle}
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
           <Avatar alt={userName} src={userName}>
@@ -78,13 +83,10 @@ const Profile = (props) => {
       </ButtonBase>
       <Popper
         placement="bottom-end"
-        open={Boolean(anchorElUser)}
+        open={Boolean(open)}
         anchorEl={anchorRef.current}
-        style={{
-          marginTop: "10px",
-        }}
       >
-        {Boolean(anchorElUser) && (
+        {Boolean(open) && (
           <Paper
             sx={{
               ...menuPaperCss,
@@ -129,39 +131,35 @@ const Profile = (props) => {
                       </Grid>
                     </Grid>
                   </CardContent>
-                  {Boolean(anchorElUser) && (
-                    <>
-                      <Tabs
-                        variant="fullWidth"
-                        value={value}
-                        onChange={handleChange}
-                        aria-label="profile tabs"
-                      >
-                        <Tab
-                          sx={tabCss}
-                          icon={<Person style={tabIconCss} />}
-                          label={content.PROFILE_LABEL}
-                          value={0}
-                        />
-                        <Tab
-                          sx={tabCss}
-                          icon={<SettingsOutlined style={tabIconCss} />}
-                          label={content.SETTINGS_LABEL}
-                          value={1}
-                        />
-                      </Tabs>
-                      <TabPanel value={value} index={0}>
-                        <Suspense fallback={<CircularProgress />}>
-                          <ProfileTab handleLogout={handleLogout} />
-                        </Suspense>
-                      </TabPanel>
-                      <TabPanel value={value} index={1}>
-                        <Suspense fallback={<CircularProgress />}>
-                          <SettingTab />
-                        </Suspense>
-                      </TabPanel>
-                    </>
-                  )}
+                  <Tabs
+                    variant="fullWidth"
+                    value={value}
+                    onChange={handleChange}
+                    aria-label="profile tabs"
+                  >
+                    <Tab
+                      sx={tabCss}
+                      icon={<Person style={tabIconCss} />}
+                      label={content.PROFILE_LABEL}
+                      value={0}
+                    />
+                    <Tab
+                      sx={tabCss}
+                      icon={<SettingsOutlined style={tabIconCss} />}
+                      label={content.SETTINGS_LABEL}
+                      value={1}
+                    />
+                  </Tabs>
+                  <TabPanel value={value} index={0}>
+                    <Suspense fallback={<CircularProgress />}>
+                      <ProfileTab handleLogout={handleLogout} />
+                    </Suspense>
+                  </TabPanel>
+                  <TabPanel value={value} index={1}>
+                    <Suspense fallback={<CircularProgress />}>
+                      <SettingTab />
+                    </Suspense>
+                  </TabPanel>
                 </MainCard>
               </ClickAwayListener>
             </Suspense>
@@ -170,16 +168,6 @@ const Profile = (props) => {
       </Popper>
     </Box>
   );
-};
-
-Profile.defaultProps = {
-  anchorElUser: false,
-  handleCloseUserMenu: () => {},
-};
-
-Profile.propTypes = {
-  anchorElUser: PropTypes.bool,
-  handleCloseUserMenu: PropTypes.func,
 };
 
 export default Profile;

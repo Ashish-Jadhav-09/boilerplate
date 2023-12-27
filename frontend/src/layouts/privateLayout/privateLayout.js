@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { PropTypes } from 'prop-types';
-import { useNavigate } from 'react-router';
-import CssBaseline from '@mui/material/CssBaseline';
-import NavBar from '../components/navbar';
+import React, { useState, useEffect } from "react";
+import { PropTypes } from "prop-types";
+import { useNavigate } from "react-router";
+import NavBar from "../components/navbar";
+import { Box, Toolbar } from "@mui/material";
 
 const PrivateLayout = (props) => {
   const { children } = props;
@@ -11,20 +11,22 @@ const PrivateLayout = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem('accessToken')) {
+    if (localStorage.getItem("accessToken")) {
       setAuthenticated(true);
     } else {
-      navigate('/', { replace: true });
+      navigate("/", { replace: true });
     }
   }, [navigate]);
 
   if (authenticated) {
     return (
-      <div>
-        <CssBaseline />
+      <>
         <NavBar />
-        {children}
-      </div>
+        <Box component="main">
+          <Toolbar />
+          {children}
+        </Box>
+      </>
     );
   }
   return <></>;

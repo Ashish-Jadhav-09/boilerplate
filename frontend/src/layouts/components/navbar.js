@@ -17,35 +17,27 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "react-router-dom";
 import { content } from "./content";
 import { adminPages, constants, userPages } from "../../config/constant";
+import { welcomeCss } from "./helper";
 
 const Profile = lazy(() => import("./menuSection"));
 
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
   return (
     <AppBar
+      component="nav"
       style={{
-        height: "4rem",
         backgroundColor: "black",
         color: "white",
-        position: "absolute",
       }}
     >
       <Container maxWidth="xl">
@@ -53,18 +45,9 @@ const NavBar = () => {
           <Typography
             component="div"
             variant="h6"
-            noWrap
-            sx={{
-              mr: 3,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "fantasy",
-              fontWeight: 700,
-              letterSpacing: ".1rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
+            sx={welcomeCss}
           >
-            {"Welcome"}
+            {content.WELCOME}
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -141,17 +124,7 @@ const NavBar = () => {
           <Typography
             component="div"
             variant="h6"
-            noWrap
-            sx={{
-              mr: 3,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "fantasy",
-              fontWeight: 700,
-              letterSpacing: ".1rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
+            sx={welcomeCss}
           >
             {content.WELCOME}
           </Typography>
@@ -209,12 +182,9 @@ const NavBar = () => {
           </IconButton>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title={content.OPEN_SETTINGS_TOOLTIP}>
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton sx={{ p: 0 }}>
                 <Suspense fallback={<CircularProgress />}>
-                  <Profile
-                    anchorElUser={anchorElUser}
-                    handleCloseUserMenu={handleCloseUserMenu}
-                  />
+                  <Profile />
                 </Suspense>
               </IconButton>
             </Tooltip>

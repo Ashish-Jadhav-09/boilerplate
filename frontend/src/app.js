@@ -1,26 +1,27 @@
-import React from 'react';
-import { ApolloProvider } from '@apollo/client';
-import { ErrorBoundry } from './components';
-import { CssBaseline, Typography } from '@mui/material';
-import { PrivateRoute } from './routes';
-import { client } from './apolloClient';
-import { SnackBarProvider } from './context';
+import React from "react";
+import { ApolloProvider } from "@apollo/client";
+import { ErrorBoundry } from "./components";
+import { CssBaseline, Typography } from "@mui/material";
+import { PageRoutes } from "./routes";
+import { client } from "./apolloClient";
+import { SnackBarProvider } from "./context";
+import { BrowserRouter } from "react-router-dom";
 
 const App = () => {
   return (
-    <div style={{ backgroundColor: '#f5f5f0' }}>
-      <ErrorBoundry>
-        <ApolloProvider client={client}>
-          <SnackBarProvider>
-            <Typography>
-              <CssBaseline />
-              <PrivateRoute />
-            </Typography>
-          </SnackBarProvider>
-        </ApolloProvider>
-      </ErrorBoundry>
-    </div>
+    <ErrorBoundry>
+      <ApolloProvider client={client}>
+        <SnackBarProvider>
+          <Typography>
+            <CssBaseline />
+            <BrowserRouter>
+              <PageRoutes />
+            </BrowserRouter>
+          </Typography>
+        </SnackBarProvider>
+      </ApolloProvider>
+    </ErrorBoundry>
   );
-}
+};
 
 export default App;
