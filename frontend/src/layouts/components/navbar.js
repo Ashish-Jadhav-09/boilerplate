@@ -17,7 +17,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "react-router-dom";
 import { content } from "./content";
 import { adminPages, constants, userPages } from "../../config/constant";
-import { welcomeCss } from "./helper";
+import { welcomeCss, welcomeMobileCss } from "./helper";
 
 const Profile = lazy(() => import("./menuSection"));
 
@@ -124,7 +124,7 @@ const NavBar = () => {
           <Typography
             component="div"
             variant="h6"
-            sx={welcomeCss}
+            sx={welcomeMobileCss}
           >
             {content.WELCOME}
           </Typography>

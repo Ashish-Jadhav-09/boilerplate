@@ -29,3 +29,14 @@ export const welcomeCss = {
   color: "inherit",
   textDecoration: "none",
 };
+
+export const welcomeMobileCss = {
+  mr: 3,
+  display: { xs: "flex", md: "none" },
+  flexGrow: 1,
+  fontFamily: "fantasy",
+  fontWeight: 700,
+  letterSpacing: ".1rem",
+  color: "inherit",
+  textDecoration: "none",
+}
