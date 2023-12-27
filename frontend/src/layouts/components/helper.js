@@ -17,4 +17,15 @@ export const menuPaperCss = {
   minWidth: 240,
   maxWidth: 290,
   position: "relative",
+  mt: 1,
+};
+
+export const welcomeCss = {
+  mr: 3,
+  display: { xs: "none", md: "flex" },
+  fontFamily: "fantasy",
+  fontWeight: 700,
+  letterSpacing: ".1rem",
+  color: "inherit",
+  textDecoration: "none",
 };

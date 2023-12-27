@@ -16,8 +16,9 @@ import {
 } from "@mui/material";
 import { Email, Visibility, VisibilityOff } from "@mui/icons-material";
 import Link from "@mui/material/Link";
-import { loginUserValidationSchema } from "./helper";
+import { loginBox, loginMainGrid, loginUserValidationSchema } from "./helper";
 import { content } from "./content";
+import { constants, routes } from "../../config/constant";
 
 const Login = () => {
   const [login] = useMutation(LOGIN);
@@ -105,37 +106,40 @@ const Login = () => {
       if (output?.data?.login?.data) {
         localStorage.setItem("accessToken", output.data.login.data.token);
         localStorage.setItem(
-          "user",
+          constants.user,
           JSON.stringify(output.data.login.data.user)
         );
         snackBar(
-          `${output.data.login.data.user.firstName} Login Successfully`,
-          "success"
+          `${output.data.login.data.user.firstName} ${content.LOGIN_SUCCESSFULLY}`,
+          constants.success
         );
         navigation(
-          `/${
-            output.data.login.data.user.role === "admin"
-              ? `${output.data.login.data.user.role}-dashboard`
-              : "dashboard"
-          }`,
+          output.data.login.data.user.role === constants.admin
+            ? routes.ADMIN_DASHBOARD
+            : routes.USER_DASHBOARD,
           {
             replace: true,
           }
         );
       } else {
-        snackBar(`try with different credentials`, "error");
+        snackBar(content.TRY_WITH_DIFFERENT_CREDENTIALS, constants.error);
       }
     } catch (error) {
-      console.log("error", error);
+      snackBar(content.TRY_WITH_DIFFERENT_CREDENTIALS, constants.error);
+      console.log("CATCH BLOCK : Login : handleSubmit =>", error);
     }
   };
 
   useEffect(() => {
-    if (localStorage.getItem("accessToken") && localStorage.getItem("user")) {
+    if (
+      localStorage.getItem("accessToken") &&
+      localStorage.getItem(constants.user)
+    ) {
       navigation(
-        JSON.parse(localStorage.getItem("user")).role === "admin"
-          ? "admin-dashboard"
-          : "dashboard",
+        JSON.parse(localStorage.getItem(constants.user)).role ===
+          constants.admin
+          ? routes.ADMIN_DASHBOARD
+          : routes.USER_DASHBOARD,
         {
           replace: true,
         }
@@ -144,36 +148,11 @@ const Login = () => {
   }, []);
 
   return (
-    <Grid
-      container
-      component="main"
-      sx={{
-        height: "100vh",
-        backgroundImage: "url(https://source.unsplash.com/random?wallpapers)",
-        backgroundRepeat: "no-repeat",
-        backgroundColor: (t) =>
-          t.palette.mode === "light" ? t.palette.grey[50] : t.palette.grey[900],
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
+    <Grid container component="main" sx={loginMainGrid}>
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} />
       <Grid item xs={12} sm={8} md={5} elevation={6} square>
-        <Box
-          sx={{
-            my: 8,
-            mx: 4,
-            mt: 12,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            backgroundColor: "rgba(255, 255, 255, 0.5)",
-            backdropFilter: "blur(8px)",
-            padding: 5,
-            borderRadius: 3,
-          }}
-        >
+        <Box sx={loginBox}>
           <Box sx={{ mt: 0 }}>
             <Typography fontSize={30}>
               {content.LOGIN_TO_YOUR_ACCOUNT}
@@ -182,14 +161,14 @@ const Login = () => {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
+              id={content.EMAIL}
+              label={content.EMAIL_ADDRESS_LABEL}
+              name={content.EMAIL}
               value={email}
-              onChange={(event) => handleOnChange("email", event)}
-              onBlur={() => handleOnBlur("email")}
-              error={Boolean(getError("email"))}
-              helperText={getError("email")}
+              onChange={(event) => handleOnChange(content.EMAIL, event)}
+              onBlur={() => handleOnBlur(content.EMAIL)}
+              error={Boolean(getError(content.EMAIL))}
+              helperText={getError(content.EMAIL)}
               InputProps={{
                 endAdornment: (
                   <IconButton>
@@ -205,15 +184,15 @@ const Login = () => {
               margin="normal"
               required
               fullWidth
-              name="password"
-              label="Password"
-              id="password"
+              name={content.PASSWORD}
+              label={content.PASSWORD_LABEL}
+              id={content.PASSWORD}
               value={password}
-              onChange={(event) => handleOnChange("password", event)}
-              onBlur={() => handleOnBlur("password")}
-              error={Boolean(getError("password"))}
-              helperText={getError("password")}
-              type={showPassword ? "text" : "password"}
+              onChange={(event) => handleOnChange(content.PASSWORD, event)}
+              onBlur={() => handleOnBlur(content.PASSWORD)}
+              error={Boolean(getError(content.PASSWORD))}
+              helperText={getError(content.PASSWORD)}
+              type={showPassword ? "text" : content.PASSWORD}
               InputProps={{
                 endAdornment: (
                   <IconButton
@@ -235,7 +214,7 @@ const Login = () => {
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label={content.REMEMBER_ME}
             />
             <Button
               type="submit"
@@ -254,7 +233,7 @@ const Login = () => {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/register-user" variant="body2">
+                <Link href={routes.REGISTER_USER} variant="body2">
                   {content.DONT_HAVE_ACCOUNT}
                 </Link>
               </Grid>
