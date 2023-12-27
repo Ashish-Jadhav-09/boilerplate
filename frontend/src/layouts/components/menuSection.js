@@ -93,8 +93,8 @@ const Profile = (props) => {
               },
             }}
           >
-            <ClickAwayListener onClickAway={handleClose}>
-              <Suspense fallback={<CircularProgress />}>
+            <Suspense fallback={<CircularProgress />}>
+              <ClickAwayListener onClickAway={handleClose}>
                 <MainCard elevation={0} border={false} content={false}>
                   <CardContent sx={{ px: 2.5, pt: 3 }}>
                     <Grid
@@ -163,8 +163,8 @@ const Profile = (props) => {
                     </>
                   )}
                 </MainCard>
-              </Suspense>
-            </ClickAwayListener>
+              </ClickAwayListener>
+            </Suspense>
           </Paper>
         )}
       </Popper>
