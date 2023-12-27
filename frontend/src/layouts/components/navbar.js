@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { Suspense, lazy, useState } from "react";
 import {
   AppBar,
-  Avatar,
   Badge,
   Box,
+  CircularProgress,
   Container,
   IconButton,
   Menu,
@@ -14,22 +14,15 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { content } from "./content";
+import { adminPages, constants, userPages } from "../../config/constant";
 
-const adminPages = [
-  { page: "DASHBOARD", url: "/admin-dashboard" },
-  {
-    page: "USER MANAGEMENT",
-    url: "/admin-dashboard/user-management",
-  },
-];
-
-const pages = [{ page: "DASHBOARD", url: `/dashboard` }];
+const Profile = lazy(() => import("./menuSection"));
 
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -48,8 +41,12 @@ const NavBar = () => {
 
   return (
     <AppBar
-      position="static"
-      style={{ height: "4rem", backgroundColor: "black", color: "white" }}
+      style={{
+        height: "4rem",
+        backgroundColor: "black",
+        color: "white",
+        position: "absolute",
+      }}
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -98,8 +95,9 @@ const NavBar = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {JSON.parse(localStorage.getItem("user")).role.toLowerCase() ===
-              "admin"
+              {JSON.parse(
+                localStorage.getItem(constants.user)
+              ).role.toLowerCase() === constants.admin
                 ? adminPages.map((element, index) => (
                   <MenuItem
                     key={`adminPages${index + 1}`}
@@ -119,7 +117,7 @@ const NavBar = () => {
                     </Link>
                   </MenuItem>
                 ))
-                : pages.map((element, index) => (
+                : userPages.map((element, index) => (
                   <MenuItem
                     key={`pages${index + 1}`}
                     onClick={handleCloseNavMenu}
@@ -155,11 +153,12 @@ const NavBar = () => {
               textDecoration: "none",
             }}
           >
-            {"Welcome"}
+            {content.WELCOME}
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {JSON.parse(localStorage.getItem("user")).role.toLowerCase() ===
-            "admin"
+            {JSON.parse(
+              localStorage.getItem(constants.user)
+            ).role.toLowerCase() === constants.admin
               ? adminPages.map((element, index) => (
                 <MenuItem
                   key={`adminPages${index + 1}`}
@@ -179,7 +178,7 @@ const NavBar = () => {
                   </Link>
                 </MenuItem>
               ))
-              : pages.map((element, index) => (
+              : userPages.map((element, index) => (
                 <MenuItem
                   key={`pages${index + 1}`}
                   onClick={handleCloseNavMenu}
@@ -200,52 +199,25 @@ const NavBar = () => {
               ))}
           </Box>
           <IconButton color="inherit">
-            <Badge badgeContent={4} color="info" style={{ marginRight: '15px' }}>
+            <Badge
+              badgeContent={4}
+              color="info"
+              style={{ marginRight: "15px" }}
+            >
               <NotificationsIcon />
             </Badge>
           </IconButton>
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title={content.OPEN_SETTINGS_TOOLTIP}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar
-                  alt={`${JSON.parse(localStorage.getItem("user")).firstName}`}
-                  src={`${localStorage.getItem("avatar")}`}
-                />
+                <Suspense fallback={<CircularProgress />}>
+                  <Profile
+                    anchorElUser={anchorElUser}
+                    handleCloseUserMenu={handleCloseUserMenu}
+                  />
+                </Suspense>
               </IconButton>
             </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem key="Profile" onClick={handleCloseUserMenu}>
-                <Typography component="div" textAlign="center">
-                  {"Profile"}
-                </Typography>
-              </MenuItem>
-              <MenuItem
-                key="Logout"
-                onClick={() => {
-                  localStorage.clear();
-                  navigate("/", { replace: true });
-                }}
-              >
-                <Typography component="div" textAlign="center">
-                  {"Logout"}
-                </Typography>
-              </MenuItem>
-            </Menu>
           </Box>
         </Toolbar>
       </Container>

@@ -19,11 +19,7 @@ class UserRepository {
     }
   }
 
-  public async getAllUsers(
-    query?: mongoose.FilterQuery<IUserModel>,
-    projection?: any,
-    options?: mongoose.QueryOptions
-  ) {
+  public async getAllUsers(query?: mongoose.FilterQuery<IUserModel>, projection?: any, options?: mongoose.QueryOptions) {
     try {
       return await userModel.find(
         {
@@ -42,10 +38,7 @@ class UserRepository {
     }
   }
 
-  public async findOneUser(
-    query: mongoose.FilterQuery<IUserModel>,
-    projection?: any
-  ) {
+  public async findOneUser(query: mongoose.FilterQuery<IUserModel>, projection?: any) {
     try {
       return await userModel.findOne(query, projection);
     } catch (error) {
@@ -73,15 +66,11 @@ class UserRepository {
     }
   }
 
-  public async updateUser(
-    query: mongoose.FilterQuery<any>,
-    data: mongoose.FilterQuery<IUserModel[]>,
-    projection: any
-  ) {
+  public async updateUser(query: mongoose.FilterQuery<any>, data: mongoose.FilterQuery<IUserModel[]>, projection: any) {
     try {
       console.log(": Updated Data :", data);
       await userModel.updateOne({ deletedAt: null, ...query }, { deletedAt: new Date() });
-      return await this.createUser(data, projection);
+      return await this.createUser({ ...data, deletedAt: null }, projection);
     } catch (error) {
       console.log("CATCH BLOCK : User Repository update =>", error);
     }
@@ -89,9 +78,7 @@ class UserRepository {
 
   public async deleteUser(query: mongoose.FilterQuery<IUserModel>) {
     try {
-      return await userModel
-        .updateOne({ deletedAt: null, ...query }, { deletedAt: new Date() })
-        .lean();
+      return await userModel.updateOne({ deletedAt: null, ...query }, { deletedAt: new Date() }).lean();
     } catch (error) {
       console.log("CATCH BLOCK : User Repository delete =>", error);
     }

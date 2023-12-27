@@ -35,7 +35,6 @@ const GenericTable = (props) => {
     handleOnUserEditDialog,
   } = props;
 
-  console.log('data', data);
   const [oldData, setOldData] = useState({});
 
   const handleOnOldData = (dataItem) => {
@@ -98,7 +97,7 @@ const GenericTable = (props) => {
                       ? { background: 'white' }
                       : { background: '#F0F0F0' }
                   }
-                  key={`data${index}`}
+                  key={`data${index+1}`}
                   onClick={() =>
                     (dataItem?.url)
                       ? window.open(
@@ -138,7 +137,7 @@ const GenericTable = (props) => {
                         ))}
                       </TableCell>
                     ) : (
-                      <TableCell key={Math.random()} align="center">
+                      <TableCell key={`iconColIndex${iconColIndex+1}`} align="center">
                         {format ? format(dataItem[value]) : dataItem[value]}
                       </TableCell>
                     )
@@ -174,16 +173,10 @@ GenericTable.propTypes = {
   onPageChange: PropTypes.func,
   onRowsPerPageChange: PropTypes.func,
   rowsPerPageOptions: PropTypes.arrayOf(PropTypes.number),
-  batchEditDialog: PropTypes.bool,
-  batchRemoveDialog: PropTypes.bool,
   userEditDialog: PropTypes.bool,
   userRemoveDialog: PropTypes.bool,
-  shuflleReviewers: PropTypes.bool,
-  handleOnShuffleReviewers: PropTypes.func,
   handleOnUserRemoveDialog: PropTypes.func,
   handleOnUserEditDialog: PropTypes.func,
-  handleOnBatchEditDialog: PropTypes.func,
-  handleOnBatchRemoveDialog: PropTypes.func,
 };
 
 GenericTable.defaultProps = {
@@ -198,16 +191,10 @@ GenericTable.defaultProps = {
   onPageChange: () => {},
   onRowsPerPageChange: () => {},
   handleOnSort: () => {},
-  batchEditDialog: false,
-  batchRemoveDialog: false,
   userEditDialog: false,
   userRemoveDialog: false,
-  shuflleReviewers: false,
-  handleOnShuffleReviewers: () => {},
   handleOnUserRemoveDialog: () => {},
   handleOnUserEditDialog: () => {},
-  handleOnBatchEditDialog: () => {},
-  handleOnBatchRemoveDialog: () => {},
 };
 
 export default GenericTable;

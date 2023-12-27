@@ -13,7 +13,7 @@ class UserController {
       if (options.role && options.role === "admin") {
         const adminData = await userRepository.getAllUsers({ role: { $eq: options.role } }, {}, {});
         const adminCount = await userRepository.countUsers({ role: { $eq: options.role } });
-        response.status(200).send({
+        return response.send({
           message: `Successfully fetched ${adminCount} Admin`,
           data: adminData,
           status: status.SUCCESS,
@@ -23,7 +23,7 @@ class UserController {
       if (options && options.role === "general") {
         const generalUserData = await userRepository.getAllUsers({ role: { $ne: "admin" } }, {}, {});
         const generalUserCount = await userRepository.countUsers({ role: { $ne: "admin" } });
-        response.status(200).send({
+        return response.send({
           message: `Successfully fetched ${generalUserCount} users`,
           data: generalUserData,
           status: status.SUCCESS,
@@ -32,14 +32,14 @@ class UserController {
 
       const allUserData = await userRepository.getAllUsers({}, {}, {});
       const allUserCount = await userRepository.countUsers();
-      response.status(200).send({
+      return response.send({
         message: `Successfully fetched all ${allUserCount} users`,
         data: allUserData,
         status: status.SUCCESS,
       });
     } catch (error) {
       console.log("CATCH BLOCK : user controller getAllUsersData =>", error);
-      throw next({
+      return next({
         error: errorMessages.BAD_REQUEST,
         message: "invalid required",
         status: status.BAD_REQUEST,
@@ -57,24 +57,27 @@ class UserController {
       if (userExists === null) {
         console.log("role", role);
         if (email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
-          const output = await userRepository.createUser({
-            ...request.body,
-            password: await bcrypt.hash(password, configuration.saltRounds),
-          }, {});
-          response.status(200).send({
+          const output = await userRepository.createUser(
+            {
+              ...request.body,
+              password: await bcrypt.hash(password, configuration.saltRounds),
+            },
+            {}
+          );
+          return response.send({
             message: "successfully created user",
             data: output,
             status: status.SUCCESS,
           });
         } else {
-          response.status(404).send({
+          return response.send({
             error: errorMessages.BAD_REQUEST,
             message: "enter a valid email",
             status: status.BAD_REQUEST,
           });
         }
       } else {
-        response.status(404).send({
+        return response.send({
           error: errorMessages.BAD_REQUEST,
           message: "User already exists",
           status: status.BAD_REQUEST,
@@ -82,7 +85,7 @@ class UserController {
       }
     } catch (error) {
       console.log("CATCH BLOCK : user controller create =>", error);
-      throw next({
+      return next({
         error: errorMessages.BAD_REQUEST,
         message: "details are required",
         status: status.BAD_REQUEST,
@@ -99,13 +102,13 @@ class UserController {
       if (userExists) {
         const updatedData = Object.assign(JSON.parse(JSON.stringify(userExists)), request.body);
         const result = await userRepository.updateUser({ originalId }, updatedData, {});
-        response.status(200).send({
+        response.send({
           message: "successfully updated user",
           data: result,
           status: status.SUCCESS,
         });
       } else {
-        throw next({
+        return next({
           error: errorMessages.BAD_REQUEST,
           message: "user is not exists",
           status: status.BAD_REQUEST,
@@ -113,7 +116,7 @@ class UserController {
       }
     } catch (error) {
       console.log("CATCH BLOCK : user controller update =>", error);
-      throw next({
+      return next({
         error: errorMessages.BAD_REQUEST,
         message: "you cannot update user exception",
         status: status.BAD_REQUEST,
@@ -127,13 +130,13 @@ class UserController {
       const userExists = await userRepository.findOneUser({ originalId });
       if (userExists) {
         await userRepository.deleteUser({ originalId });
-        response.status(200).send({
+        response.send({
           message: "successfully deleted user",
           data: { originalId },
           status: status.SUCCESS,
         });
       } else {
-        throw next({
+        return next({
           error: errorMessages.BAD_REQUEST,
           message: "user is not exists",
           status: status.BAD_REQUEST,
@@ -141,7 +144,7 @@ class UserController {
       }
     } catch (error) {
       console.log("CATCH BLOCK : user controller delete =>", error);
-      throw next({
+      return next({
         error: errorMessages.BAD_REQUEST,
         message: "originalId is required",
         status: status.BAD_REQUEST,
@@ -163,20 +166,20 @@ class UserController {
           const token = jwt.sign({ data: userExists }, configuration.jwt_secret, {
             expiresIn: 60 * 60,
           });
-          response.send({
+          return response.send({
             message: "Logged in successfully",
             data: { token, user: userExists },
             status: status.SUCCESS,
           });
         } else {
-          response.send({
+          return response.send({
             message: "email or password is invalid",
             data: userExists,
             status: status.BAD_REQUEST,
           });
         }
       } else {
-        response.send({
+        return response.send({
           message: "email or password is invalid",
           data: userExists,
           status: status.BAD_REQUEST,
