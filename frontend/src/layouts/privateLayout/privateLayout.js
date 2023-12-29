@@ -22,7 +22,7 @@ const PrivateLayout = (props) => {
     return (
       <>
         <NavBar />
-        <Box component="main">
+        <Box component="main" style={{ backgroundColor: "#FAFAFB" }}>
           <Toolbar />
           {children}
         </Box>

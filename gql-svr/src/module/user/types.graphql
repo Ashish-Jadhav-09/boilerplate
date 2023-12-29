@@ -29,6 +29,9 @@ type user {
   email: String
   password: String
   role: String
+  contactNo: String
+  bio: String
+  website: String
 }
 
 input UsersData  {
@@ -37,6 +40,9 @@ input UsersData  {
   email: String
   password: String
   role: String
+  contactNo?: String
+  bio?: String
+  website?: String
 }
 
 type User {
@@ -46,4 +52,7 @@ type User {
   email: String
   password: String
   role: String
+  contactNo: String
+  bio: String
+  website: String
 }

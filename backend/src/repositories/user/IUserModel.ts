@@ -9,4 +9,6 @@ export interface IUserModel {
   location: string;
   contactNo: string;
   role: string;
+  bio: string;
+  website: string;
 }

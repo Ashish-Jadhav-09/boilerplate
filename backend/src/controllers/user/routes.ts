@@ -2,9 +2,25 @@ import { Router } from "express";
 import user from "./userController";
 import userValidation from "./validation";
 import validationHandler from "../../libs/validateHandler";
-import authmiddleware from "../../libs/routes/authmiddleware";
+import authMiddleware from "../../libs/routes/authMiddleware";
 
 const userRouter: Router = Router();
+  /**
+   * @swagger
+   * /api/user/me:
+   *   get:
+   *     security:
+   *      - APIKeyHeader: []
+   *     tags:
+   *     - user
+   *     summary: get user profile data
+   *     description: Return user data
+   *     responses:
+   *       200:
+   *         description: fetch user data
+   */
+userRouter
+  .get('/profile', authMiddleware, user.profile)
   /**
    * @swagger
    * /api/user/login:
@@ -58,7 +74,7 @@ userRouter
    */
   .get(
     "/allUsersData",
-    authmiddleware,
+    authMiddleware,
     validationHandler(userValidation.get),
     user.getAllUsersData
   )
@@ -139,7 +155,7 @@ userRouter
    */
   .put(
     "/:originalId",
-    authmiddleware,
+    authMiddleware,
     validationHandler(userValidation.update),
     user.updateUser
   )
@@ -165,7 +181,7 @@ userRouter
    */
   .delete(
     "/:originalId",
-    authmiddleware,
+    authMiddleware,
     validationHandler(userValidation.delete),
     user.deleteUser
   )

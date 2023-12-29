@@ -11,6 +11,7 @@ import {
   FormControlLabel,
   Grid,
   IconButton,
+  InputAdornment,
   TextField,
   Typography,
 } from "@mui/material";
@@ -150,7 +151,6 @@ const Login = () => {
   return (
     <Grid container component="main" sx={loginMainGrid}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} />
       <Grid item xs={12} sm={8} md={5} elevation={6} square>
         <Box sx={loginBox}>
           <Box sx={{ mt: 0 }}>
@@ -161,6 +161,7 @@ const Login = () => {
               margin="normal"
               required
               fullWidth
+              autoComplete="off"
               id={content.EMAIL}
               label={content.EMAIL_ADDRESS_LABEL}
               name={content.EMAIL}
@@ -171,19 +172,17 @@ const Login = () => {
               helperText={getError(content.EMAIL)}
               InputProps={{
                 endAdornment: (
-                  <IconButton>
+                  <InputAdornment position="start">
                     <Email />
-                  </IconButton>
+                  </InputAdornment>
                 ),
-              }}
-              sx={{
-                backgroundColor: "transparent",
               }}
             />
             <TextField
               margin="normal"
               required
               fullWidth
+              autoComplete="off"
               name={content.PASSWORD}
               label={content.PASSWORD_LABEL}
               id={content.PASSWORD}
@@ -207,9 +206,6 @@ const Login = () => {
                     {showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 ),
-              }}
-              sx={{
-                backgroundColor: "transparent",
               }}
             />
             <FormControlLabel

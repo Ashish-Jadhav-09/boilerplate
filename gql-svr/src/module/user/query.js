@@ -8,4 +8,13 @@ export default {
       return error;
     }
   },
+  getProfile: async (_, __, { dataSources: { userApi } }) => {
+    try {
+      const respose = await userApi.getProfile();
+      return respose?.data;
+    } catch (error) {
+      console.log('CATCH BLOCK : Module : User : Query : getProfile =>', error);
+      return error;
+    }
+  },
 };

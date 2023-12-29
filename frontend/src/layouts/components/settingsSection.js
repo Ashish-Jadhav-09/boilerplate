@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import {
   List,
@@ -11,7 +12,8 @@ import { content } from "./content";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../config/constant";
 
-const SettingTab = () => {
+const SettingTab = (props) => {
+  const { handleToggle } = props;
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -27,7 +29,10 @@ const SettingTab = () => {
       }}
     >
       <ListItemButton
-        onClick={() => navigate(routes.SUPPORT, { replace: true })}
+        onClick={() => {
+          navigate(routes.SUPPORT, { replace: true });
+          handleToggle();
+        }}
       >
         <ListItemIcon>
           <QuestionAnswerOutlined />
@@ -35,7 +40,10 @@ const SettingTab = () => {
         <ListItemText primary={content.SUPPORT} />
       </ListItemButton>
       <ListItemButton
-        onClick={() => navigate(routes.ACCOUNT_SETTINGS, { replace: true })}
+        onClick={() => {
+          navigate(routes.ACCOUNT_SETTINGS, { replace: true });
+          handleToggle();
+        }}
       >
         <ListItemIcon>
           <Person />
@@ -44,6 +52,14 @@ const SettingTab = () => {
       </ListItemButton>
     </List>
   );
+};
+
+SettingTab.defaultProps = {
+  handleToggle: () => {},
+};
+
+SettingTab.propTypes = {
+  handleToggle: PropTypes.func,
 };
 
 export default SettingTab;

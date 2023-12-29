@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { routes } from "../../config/constant";
 
 const ProfileTab = (props) => {
-  const { handleLogout } = props;
+  const { handleLogout, handleToggle } = props;
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -28,7 +28,12 @@ const ProfileTab = (props) => {
         },
       }}
     >
-      <ListItemButton onClick={() => navigate(routes.PROFILE, { replace: true })}>
+      <ListItemButton
+        onClick={() => {
+          navigate(routes.PROFILE, { replace: true });
+          handleToggle();
+        }}
+      >
         <ListItemIcon>
           <Person />
         </ListItemIcon>
@@ -46,10 +51,12 @@ const ProfileTab = (props) => {
 
 ProfileTab.defaultProps = {
   handleLogout: () => {},
+  handleToggle: () => {},
 };
 
 ProfileTab.propTypes = {
   handleLogout: PropTypes.func,
+  handleToggle: PropTypes.func,
 };
 
 export default ProfileTab;

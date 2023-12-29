@@ -20,6 +20,15 @@ class UserAPI extends RESTDataSource {
     }
   };
 
+  getProfile = async () => {
+    try {
+      return await this.get('/profile');
+    } catch (error) {
+      console.log('CATCH BLOCK : DataSource : UserAPI : getProfile =>', error);
+      throw error;
+    }
+  };
+
   registerUser = async (input) => {
     try {
       return await this.post('/', input);

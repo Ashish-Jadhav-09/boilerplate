@@ -6,6 +6,7 @@ import {
   CssBaseline,
   Grid,
   IconButton,
+  InputAdornment,
   TextField,
   Typography,
 } from "@mui/material";
@@ -15,7 +16,13 @@ import { useNavigate } from "react-router-dom";
 import { REGISTER_USER } from "../../apolloClient/mutation";
 import { useMutation } from "@apollo/client";
 import { content } from "./content";
-import { registerUserValidationSchema } from "./helper";
+import {
+  blurBoxCss,
+  boxCss,
+  mainGrid,
+  registerUserValidationSchema,
+  signUpTitle,
+} from "./helper";
 import { Person, Email, Visibility, VisibilityOff } from "@mui/icons-material";
 
 const RegisterUser = () => {
@@ -149,55 +156,19 @@ const RegisterUser = () => {
   };
 
   return (
-    <Grid
-      container
-      component="main"
-      sx={{
-        height: "100vh",
-        backgroundImage: "url(https://source.unsplash.com/random?wallpapers)",
-        backgroundRepeat: "no-repeat",
-        backgroundColor: (t) =>
-          t.palette.mode === "light" ? t.palette.grey[50] : t.palette.grey[900],
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
+    <Grid container component="main" sx={mainGrid}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Box
-            sx={{
-              mt: 3,
-              backgroundColor: "rgba(255, 255, 255, 0.5)",
-              backdropFilter: "blur(8px)",
-              padding: 3,
-              borderRadius: 3,
-            }}
-          >
-            <Typography
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                fontSize: 30,
-                mb: 1,
-              }}
-            >
-              {content.SIGN_UP}
-            </Typography>
+        <Box sx={boxCss}>
+          <Box sx={blurBoxCss}>
+            <Typography sx={signUpTitle}>{content.SIGN_UP}</Typography>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   name="firstName"
                   required
                   fullWidth
+                  autoComplete="off"
                   id="firstName"
                   label="First Name"
                   value={firstName}
@@ -207,13 +178,10 @@ const RegisterUser = () => {
                   helperText={getError("firstName")}
                   InputProps={{
                     endAdornment: (
-                      <IconButton>
+                      <InputAdornment position="start">
                         <Person />
-                      </IconButton>
+                      </InputAdornment>
                     ),
-                  }}
-                  sx={{
-                    backgroundColor: "transparent",
                   }}
                 />
               </Grid>
@@ -221,6 +189,7 @@ const RegisterUser = () => {
                 <TextField
                   required
                   fullWidth
+                  autoComplete="off"
                   id="lastName"
                   label="Last Name"
                   name="lastName"
@@ -231,13 +200,10 @@ const RegisterUser = () => {
                   helperText={getError("lastName")}
                   InputProps={{
                     endAdornment: (
-                      <IconButton>
+                      <InputAdornment position="start">
                         <Person />
-                      </IconButton>
+                      </InputAdornment>
                     ),
-                  }}
-                  sx={{
-                    backgroundColor: "transparent",
                   }}
                 />
               </Grid>
@@ -245,6 +211,7 @@ const RegisterUser = () => {
                 <TextField
                   required
                   fullWidth
+                  autoComplete="off"
                   id="email"
                   label="Email Address"
                   name="email"
@@ -255,13 +222,10 @@ const RegisterUser = () => {
                   helperText={getError("email")}
                   InputProps={{
                     endAdornment: (
-                      <IconButton>
+                      <InputAdornment position="start">
                         <Email />
-                      </IconButton>
+                      </InputAdornment>
                     ),
-                  }}
-                  sx={{
-                    backgroundColor: "transparent",
                   }}
                 />
               </Grid>
@@ -269,6 +233,7 @@ const RegisterUser = () => {
                 <TextField
                   required
                   fullWidth
+                  autoComplete="off"
                   name="password"
                   label="Password"
                   id="password"
@@ -293,15 +258,13 @@ const RegisterUser = () => {
                       </IconButton>
                     ),
                   }}
-                  sx={{
-                    backgroundColor: "transparent",
-                  }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
+                  autoComplete="off"
                   name="confirmPassword"
                   label="Confirm Password"
                   id="confirmPassword"
@@ -333,9 +296,6 @@ const RegisterUser = () => {
                         )}
                       </IconButton>
                     ),
-                  }}
-                  sx={{
-                    backgroundColor: "transparent",
                   }}
                 />
               </Grid>
