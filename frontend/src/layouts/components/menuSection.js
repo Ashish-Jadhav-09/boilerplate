@@ -20,6 +20,7 @@ import { LogoutOutlined, SettingsOutlined, Person } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { tabCss, tabIconCss, menuPaperCss } from "./helper";
 import { content } from "./content";
+import { constants } from "../../config/constant";
 
 const ProfileTab = lazy(() => import("./profileSection"));
 const SettingTab = lazy(() => import("./settingsSection"));
@@ -54,7 +55,7 @@ const Profile = () => {
     setValue(newValue);
   };
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem(constants.user));
   const userName = `${user.firstName} ${user.lastName}`;
 
   return (
@@ -150,12 +151,15 @@ const Profile = () => {
                   </Tabs>
                   <TabPanel value={value} index={0}>
                     <Suspense fallback={<CircularProgress />}>
-                      <ProfileTab handleLogout={handleLogout} />
+                      <ProfileTab
+                        handleLogout={handleLogout}
+                        handleToggle={handleToggle}
+                      />
                     </Suspense>
                   </TabPanel>
                   <TabPanel value={value} index={1}>
                     <Suspense fallback={<CircularProgress />}>
-                      <SettingTab />
+                      <SettingTab handleToggle={handleToggle} />
                     </Suspense>
                   </TabPanel>
                 </MainCard>

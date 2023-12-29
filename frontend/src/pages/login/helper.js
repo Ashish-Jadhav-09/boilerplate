@@ -9,16 +9,16 @@ export const loginMainGrid = {
   height: "100vh",
   backgroundImage: "url(https://source.unsplash.com/random?wallpapers)",
   backgroundRepeat: "no-repeat",
-  backgroundColor: (t) =>
-    t.palette.mode === "light" ? t.palette.grey[50] : t.palette.grey[900],
   backgroundSize: "cover",
   backgroundPosition: "center",
+  justifyContent: "flex-end",
+  alignItems: "center",
+  matginRight: "10px",
 };
 
 export const loginBox = {
-  my: 8,
-  mx: 4,
-  mt: 12,
+  marginRight: "20px",
+  marginLeft: "20px",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",

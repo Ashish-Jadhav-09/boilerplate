@@ -1,7 +1,6 @@
 import React, { Suspense, lazy, useState } from "react";
 import {
   AppBar,
-  Badge,
   Box,
   CircularProgress,
   Container,
@@ -13,15 +12,18 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { content } from "./content";
 import { adminPages, constants, userPages } from "../../config/constant";
 import { welcomeCss, welcomeMobileCss } from "./helper";
+import "./styles.css";
 
 const Profile = lazy(() => import("./menuSection"));
+const Notification = lazy(() => import("./notification"));
 
 const NavBar = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;
   const [anchorElNav, setAnchorElNav] = useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -31,6 +33,8 @@ const NavBar = () => {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
+  console.log("currentPath", currentPath);
 
   return (
     <AppBar
@@ -42,11 +46,7 @@ const NavBar = () => {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography
-            component="div"
-            variant="h6"
-            sx={welcomeCss}
-          >
+          <Typography component="div" variant="h6" sx={welcomeCss}>
             {content.WELCOME}
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -90,10 +90,14 @@ const NavBar = () => {
                       <Typography
                         component="div"
                         style={{
-                          color: "black",
+                          color:
+                              element.url === currentPath ? "#1976D2" : "white",
                           textDecoration: "none",
                           textAlign: "center",
                         }}
+                        className={
+                          element.url !== currentPath ? "button" : ""
+                        }
                       >
                         {element.page}
                       </Typography>
@@ -109,10 +113,14 @@ const NavBar = () => {
                       <Typography
                         component="div"
                         style={{
-                          color: "black",
+                          color:
+                              element.url === currentPath ? "#1976D2" : "white",
                           textDecoration: "none",
                           textAlign: "center",
                         }}
+                        className={
+                          element.url !== currentPath ? "button" : ""
+                        }
                       >
                         {element.page}
                       </Typography>
@@ -121,11 +129,7 @@ const NavBar = () => {
                 ))}
             </Menu>
           </Box>
-          <Typography
-            component="div"
-            variant="h6"
-            sx={welcomeMobileCss}
-          >
+          <Typography component="div" variant="h6" sx={welcomeMobileCss}>
             {content.WELCOME}
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
@@ -141,10 +145,12 @@ const NavBar = () => {
                     <Typography
                       component="div"
                       style={{
-                        color: "white",
+                        color:
+                            element.url === currentPath ? "#1976D2" : "white",
                         textDecoration: "none",
                         textAlign: "center",
                       }}
+                      className={element.url !== currentPath ? "button" : ""}
                     >
                       {element.page}
                     </Typography>
@@ -160,10 +166,12 @@ const NavBar = () => {
                     <Typography
                       component="div"
                       style={{
-                        color: "white",
+                        color:
+                            element.url === currentPath ? "#1976D2" : "white",
                         textDecoration: "none",
                         textAlign: "center",
                       }}
+                      className={element.url !== currentPath ? "button" : ""}
                     >
                       {element.page}
                     </Typography>
@@ -171,15 +179,9 @@ const NavBar = () => {
                 </MenuItem>
               ))}
           </Box>
-          <IconButton color="inherit">
-            <Badge
-              badgeContent={4}
-              color="info"
-              style={{ marginRight: "15px" }}
-            >
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          <Suspense fallback={<CircularProgress />}>
+            <Notification />
+          </Suspense>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title={content.OPEN_SETTINGS_TOOLTIP}>
               <IconButton sx={{ p: 0 }}>

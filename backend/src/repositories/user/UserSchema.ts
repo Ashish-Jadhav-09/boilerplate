@@ -34,6 +34,18 @@ export class UserSchema extends mongoose.Schema {
         type: String,
         required: true,
       },
+      bio: {
+        type: String,
+        required: false,
+      },
+      contactNo: {
+        type: String,
+        required: false,
+      },
+      website: {
+        type: String,
+        required: false,
+      },
     });
     super(userSchema, collections);
   }

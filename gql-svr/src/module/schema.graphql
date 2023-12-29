@@ -1,5 +1,6 @@
 type Query {
   getUserData(role: String): [user]
+  getProfile: user
 }
 
 type Mutation {

@@ -47,6 +47,31 @@ class UserController {
     }
   };
 
+  profile = async (request: any, response: Response, next: NextFunction) => {
+    try {
+      const token = request.header('Authorization');
+      const { jwt_secret } = configuration;
+      const decodedToken: any = jwt.verify(token, jwt_secret);
+      const user = await userRepository.findOneUser(
+        {
+          originalId: decodedToken.data.originalId,
+        },
+      );
+      return response.status(200).send({
+        message: 'successfully fetched user details',
+        data: user,
+        status: status.SUCCESS,
+      });
+    } catch (error) {
+      console.log('CATCH BLOCK : user controller me =>', error);
+      return next({
+        error: errorMessages.BAD_REQUEST,
+        message: 'name is required',
+        status: status.BAD_REQUEST,
+      });
+    }
+  };
+
   registerUser = async (request: Request, response: Response, next: NextFunction) => {
     try {
       const { email, role, password } = request.body;
@@ -163,9 +188,7 @@ class UserController {
       if (userExists) {
         const match = await bcrypt.compare(password, userExists.password);
         if (match) {
-          const token = jwt.sign({ data: userExists }, configuration.jwt_secret, {
-            expiresIn: 60 * 60,
-          });
+          const token = jwt.sign({ data: userExists }, configuration.jwt_secret);
           return response.send({
             message: "Logged in successfully",
             data: { token, user: userExists },

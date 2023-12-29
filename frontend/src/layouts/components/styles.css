@@ -1,0 +1,19 @@
+.button {
+  position: relative;
+  overflow: hidden;
+}
+
+.button::after {
+  content: "";
+  display: block;
+  height: 1px;
+  width: 100%;
+  background-color: white;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.button:hover::after {
+  transform: scaleX(1);
+}

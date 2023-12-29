@@ -6,4 +6,5 @@ export const content = {
   ACCOUNT_SETTINGS: "Account Settings",
   LOGOUT: "Logout",
   OPEN_SETTINGS_TOOLTIP: "Open settings",
+  NOTIFICATIONS: "Notifications",
 };

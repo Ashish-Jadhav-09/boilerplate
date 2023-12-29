@@ -14,3 +14,21 @@ export const GET_ALL_USERS = gql`
     }
   }
 `;
+
+export const GET_PROFILE = gql`
+  query getProfile {
+    getProfile {
+      originalId
+      createdAt
+      deletedAt
+      firstName
+      lastName
+      email
+      password
+      role
+      contactNo
+      bio
+      website
+    }
+  }
+`;

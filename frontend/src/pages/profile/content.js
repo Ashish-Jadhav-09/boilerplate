@@ -1,0 +1,16 @@
+export const content = {
+  FIRST_NAME: "firstName",
+  FIRST_NAME_LABEL: "First Name",
+  LAST_NAME: "lastName",
+  LAST_NAME_LABEL: "Last Name",
+  EMAIL: "email",
+  EMAIL_ADDRESS_LABEL: "Email Address",
+  PASSWORD: "password",
+  PASSWORD_LABEL: "Password",
+  CONTACT_INFORMATION: "Contact Information",
+  EMAIL_LABEL: "Email : ",
+  CONTACT_NO: "Contact No : ",
+  WEBSITE: "Website : ",
+  SAVE: "Save",
+  CANCEL: "Cancel",
+};

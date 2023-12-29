@@ -77,8 +77,6 @@ const UserManagement = () => {
     fetchPolicy: 'network-only',
   });
 
-  console.log('data', data);
-
   useEffect(() => {
     setUserTableData(data?.getUserData);
   }, [data?.getUserData]);
