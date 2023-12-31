@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Grid,
   Dialog,
@@ -7,23 +7,24 @@ import {
   DialogTitle,
   TextField,
   DialogActions,
-  Button,
   InputAdornment,
   Divider,
-} from "@mui/material";
-import PropTypes from "prop-types";
-import PersonIcon from "@mui/icons-material/Person";
-import EmailIcon from "@mui/icons-material/Email";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { useMutation } from "@apollo/client";
-import { REGISTER_USER } from "../../../apolloClient/mutation";
+  Button,
+} from '@mui/material';
+import PropTypes from 'prop-types';
+import PersonIcon from '@mui/icons-material/Person';
+import EmailIcon from '@mui/icons-material/Email';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useMutation } from '@apollo/client';
+import { REGISTER_USER } from '../../../../apolloClient/mutation';
 import {
   addUserCancelButton,
   addUserState,
   addUserSubmitButton,
   addUserValidationSchema,
-} from "./helper";
-import { useSnackbar } from "../../../context";
+} from '../helper';
+import { useSnackbar } from '../../../../context';
+import { content } from '../content';
 
 const AddSingleUser = (props) => {
   const { onClose, onSubmit, open } = props;
@@ -64,19 +65,18 @@ const AddSingleUser = (props) => {
   };
 
   const handleOnChange = (field, event) => {
-    setAddUserFormValues({
+    const temp = {
       ...addUserFormValue,
+      isTouched: { ...addUserFormValue.isTouched, [field]: true },
       [field]: event.target.value,
-    });
-    handleError({
-      ...addUserFormValue,
-      [field]: event.target.value,
-    });
+    };
+    setAddUserFormValues(temp);
+    handleError(temp);
   };
 
   const handleOnBlur = (event, type) => {
     const { value } = event.target;
-    if (value === "") {
+    if (value === '') {
       isTouched[type] = true;
       const newValue = {
         ...addUserFormValue,
@@ -89,9 +89,9 @@ const AddSingleUser = (props) => {
 
   const getError = (type) => {
     if (isTouched[type]) {
-      return error[type] || "";
+      return error[type] || '';
     }
-    return "";
+    return '';
   };
 
   const handleOnSubmit = async () => {
@@ -103,28 +103,34 @@ const AddSingleUser = (props) => {
             lastName: addUserFormValue.lastName,
             email: addUserFormValue.email,
             password: addUserFormValue.password,
-            role: "general",
+            role: 'general',
           },
         },
       });
 
       if (output?.data?.registerUser?.status === 200) {
         onSubmit();
-        snackBar("Successfully Added User", "success");
+        snackBar('Successfully Added User', 'success');
       } else {
-        console.log("CATCH BLOCK : in addSingUser.js .then => ");
+        console.log('CATCH BLOCK : in addSingUser.js .then => ');
         onSubmit();
       }
     } catch (error) {
-      console.log("CATCH BLOCK : in addSingUser.js .then => ");
+      console.log('CATCH BLOCK : in addSingUser.js .then => ');
       onSubmit();
     }
   };
+
+  const handleOnCancel = () => {
+    onClose();
+    setAddUserFormValues(addUserState);
+  };
+
   return (
     <Dialog open={open}>
-      <DialogTitle>Add User</DialogTitle>
+      <DialogTitle>{content.ADD_USER}</DialogTitle>
       <DialogContent>
-        <DialogContentText>Enter your User Details</DialogContentText>
+        <DialogContentText>{content.ENTER_USER_DETAILS}</DialogContentText>
         <Grid container>
           <Grid item xs={11.64}>
             <TextField
@@ -134,7 +140,7 @@ const AddSingleUser = (props) => {
               label="First Name"
               InputProps={{
                 style: {
-                  padding: "1px 1px 1px 10px",
+                  padding: '1px 1px 1px 10px',
                 },
                 startAdornment: (
                   <InputAdornment position="start">
@@ -142,12 +148,12 @@ const AddSingleUser = (props) => {
                   </InputAdornment>
                 ),
               }}
-              onChange={(event) => handleOnChange("firstName", event)}
+              onChange={(event) => handleOnChange('firstName', event)}
               onBlur={(event) => {
-                handleOnBlur(event, "firstName");
+                handleOnBlur(event, 'firstName');
               }}
-              error={Boolean(getError("firstName"))}
-              helperText={getError("firstName")}
+              error={Boolean(getError('firstName'))}
+              helperText={getError('firstName')}
             />
           </Grid>
           <Grid item xs={11.64}>
@@ -158,7 +164,7 @@ const AddSingleUser = (props) => {
               label="Last Name"
               InputProps={{
                 style: {
-                  padding: "1px 1px 1px 10px",
+                  padding: '1px 1px 1px 10px',
                 },
                 startAdornment: (
                   <InputAdornment position="start">
@@ -166,12 +172,12 @@ const AddSingleUser = (props) => {
                   </InputAdornment>
                 ),
               }}
-              onChange={(event) => handleOnChange("lastName", event)}
+              onChange={(event) => handleOnChange('lastName', event)}
               onBlur={(event) => {
-                handleOnBlur(event, "lastName");
+                handleOnBlur(event, 'lastName');
               }}
-              error={Boolean(getError("lastName"))}
-              helperText={getError("lastName")}
+              error={Boolean(getError('lastName'))}
+              helperText={getError('lastName')}
             />
           </Grid>
           <Grid item xs={11.64}>
@@ -182,7 +188,7 @@ const AddSingleUser = (props) => {
               label="Email Address"
               InputProps={{
                 style: {
-                  padding: "1px 1px 1px 10px",
+                  padding: '1px 1px 1px 10px',
                 },
                 startAdornment: (
                   <InputAdornment position="start">
@@ -190,12 +196,12 @@ const AddSingleUser = (props) => {
                   </InputAdornment>
                 ),
               }}
-              onChange={(event) => handleOnChange("email", event)}
+              onChange={(event) => handleOnChange('email', event)}
               onBlur={(event) => {
-                handleOnBlur(event, "email");
+                handleOnBlur(event, 'email');
               }}
-              error={Boolean(getError("email"))}
-              helperText={getError("email")}
+              error={Boolean(getError('email'))}
+              helperText={getError('email')}
             />
           </Grid>
           <Grid item xs={11.64}>
@@ -206,7 +212,7 @@ const AddSingleUser = (props) => {
               label="Password"
               InputProps={{
                 style: {
-                  padding: "1px 1px 1px 10px",
+                  padding: '1px 1px 1px 10px',
                 },
                 startAdornment: (
                   <InputAdornment position="start">
@@ -214,19 +220,19 @@ const AddSingleUser = (props) => {
                   </InputAdornment>
                 ),
               }}
-              onChange={(event) => handleOnChange("password", event)}
+              onChange={(event) => handleOnChange('password', event)}
               onBlur={(event) => {
-                handleOnBlur(event, "password");
+                handleOnBlur(event, 'password');
               }}
-              error={Boolean(getError("password"))}
-              helperText={getError("password")}
+              error={Boolean(getError('password'))}
+              helperText={getError('password')}
             />
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button sx={addUserCancelButton} onClick={onClose}>
-          Cancel
+        <Button sx={addUserCancelButton} onClick={() => handleOnCancel()}>
+          {content.CANCEL_BUTTON}
         </Button>
         <Button
           sx={addUserSubmitButton}
@@ -234,7 +240,7 @@ const AddSingleUser = (props) => {
           onClick={() => handleOnSubmit()}
           disabled={isDisabled}
         >
-          Submit
+          {content.SUBMIT_BUTTON}
         </Button>
         <Divider />
       </DialogActions>

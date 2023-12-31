@@ -12,11 +12,12 @@ import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { DELETE_USER } from '../../apolloClient/mutation';
 import { useSnackbar } from '../../context';
+import { cancelButton, deleteButton } from './helper';
+import { content } from './content';
+import { constants } from '../../config/constant';
 
 const DeleteUser = (props) => {
-  const {
-    onClose, userRemoveDialog, data, onSubmit,
-  } = props;
+  const { onClose, userRemoveDialog, data, onSubmit } = props;
 
   const [deletedUser] = useMutation(DELETE_USER);
   const snackBar = useSnackbar();
@@ -37,12 +38,13 @@ const DeleteUser = (props) => {
       });
       if (response?.data?.deleteUser?.status === 200) {
         setAuthenticated(true);
-        snackBar('User deleted successfully', 'success');
+        snackBar(content.USER_DELETE_SUCCESS_TOAST, constants.success);
       }
       onSubmit();
       setLoading(false);
     } catch (err) {
       console.log('CATCH BLOCK : in RemoveDialog.jsx .then => ', err);
+      snackBar(content.USER_DELETE_ERROR_TOAST, constants.error);
     }
   };
 
@@ -55,28 +57,28 @@ const DeleteUser = (props) => {
   return (
     <Dialog
       sx={{
-        backdropFilter: 'blur(5px)',
         backgroundColor: 'rgba(255,255,255,0.6)',
       }}
       open={userRemoveDialog}
       onClose={onClose}
     >
-      <DialogTitle>Delete User</DialogTitle>
+      <DialogTitle>{content.DELETE_USER}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Do you really want to delete User?
+          {content.DO_YOU_REALLY_WANT_TO_DELETE_USER}
         </DialogContentText>
         <br />
         <DialogActions>
+          <Button sx={cancelButton} onClick={onClose}>
+            {content.CANCEL}
+          </Button>
           <Button
             variant="contained"
             loading={loading}
             onClick={() => handleOnSubmit(data.originalId)}
+            sx={deleteButton}
           >
-            Delete
-          </Button>
-          <Button variant="outlined" onClick={onClose}>
-            Cancel
+            {content.DELETE}
           </Button>
         </DialogActions>
       </DialogContent>

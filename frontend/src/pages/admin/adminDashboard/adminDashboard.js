@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Card, CircularProgress, Grid, Typography } from "@mui/material";
-import Chart from "../../../components/chart/chart";
+// import Chart from "../../../components/chart/chart";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_USERS } from "../../../apolloClient";
 
@@ -38,7 +38,7 @@ const AdminDashboard = () => {
           <Grid container alignItems="center" justifyContent="space-between">
             <Card sx={{ mt: 1.5, border: "1px solid #EEF1F5" }}>
               <Box sx={{ pt: 1, pr: 2 }}>
-                <Chart
+                {/* <Chart
                   options={{
                     chart: {
                       height: 450,
@@ -71,7 +71,7 @@ const AdminDashboard = () => {
                   type="line"
                   height={450}
                   width={450}
-                />
+                /> */}
               </Box>
             </Card>
           </Grid>

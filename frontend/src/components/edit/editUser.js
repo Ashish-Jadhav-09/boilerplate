@@ -15,7 +15,6 @@ import {
 import { useMutation } from "@apollo/client";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { editUserCancelButton, editUserSubmitButton } from "./style";
 import { editUserValidationSchema } from "./helper";
 import { useSnackbar } from "../../context";
@@ -31,7 +30,6 @@ const EditUser = (props) => {
     firstName: "",
     lastName: "",
     email: "",
-    password: "",
     isTouched: {},
     error: {},
     isDisabled: true,
@@ -39,7 +37,7 @@ const EditUser = (props) => {
 
   const [editFormValues, setEditFormValues] = useState(initialState);
 
-  const { firstName, lastName, email, password, isTouched, error } =
+  const { firstName, lastName, email, isTouched, error } =
     editFormValues;
 
   const handleError = (values) => {
@@ -106,7 +104,6 @@ const EditUser = (props) => {
           firstName,
           lastName,
           email,
-          password,
         },
       },
     })
@@ -130,7 +127,6 @@ const EditUser = (props) => {
       firstName: data?.firstName,
       lastName: data?.lastName,
       email: data?.email,
-      password: data?.password,
     });
   }, [data]);
 
@@ -139,7 +135,6 @@ const EditUser = (props) => {
     editFormValues?.firstName?.length === 0 ||
     editFormValues?.lastName?.length === 0 ||
     editFormValues?.email?.length === 0 ||
-    editFormValues?.password?.length === 0 ||
     !regex.test(editFormValues?.email)
   );
 
@@ -170,7 +165,6 @@ const EditUser = (props) => {
               onBlur={(event) => {
                 handleOnBlur(event, "firstName");
               }}
-              // error={() => getError("firstName")}
               helperText={() => getError("firstName")}
             />
           </Grid>
@@ -195,7 +189,6 @@ const EditUser = (props) => {
               onBlur={(event) => {
                 handleOnBlur(event, "lastName");
               }}
-              // error={() => getError("lastName")}
               helperText={() => getError("lastName")}
             />
           </Grid>
@@ -220,33 +213,7 @@ const EditUser = (props) => {
               onBlur={(event) => {
                 handleOnBlur(event, "email");
               }}
-              // error={() => getError("email")}
               helperText={() => getError("email")}
-            />
-          </Grid>
-          <Grid item xs={11.64}>
-            <TextField
-              sx={{ m: 1 }}
-              id="outlined-basic"
-              fullWidth
-              label="Password"
-              InputProps={{
-                style: {
-                  padding: "1px 1px 1px 10px",
-                },
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <VisibilityIcon />
-                  </InputAdornment>
-                ),
-              }}
-              value={editFormValues.password}
-              onChange={(event) => handleOnChange("password", event)}
-              onBlur={(event) => {
-                handleOnBlur(event, "password");
-              }}
-              // error={() => getError("password")}
-              helperText={() => getError("password")}
             />
           </Grid>
         </Grid>
@@ -264,8 +231,7 @@ const EditUser = (props) => {
             emptyField ||
             (data?.firstName === firstName &&
               data?.email === email &&
-              data?.lastName === lastName &&
-              data?.password === password)
+              data?.lastName === lastName)
           }
         >
           Submit

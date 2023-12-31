@@ -1,20 +1,12 @@
-import React, {
-  useState, useEffect, lazy, Suspense, useCallback,
-} from 'react';
-import {
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { CircularProgress, Grid, Tooltip, Typography } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import { Edit, Delete, Search } from '@mui/icons-material';
 import {
   userManagementSearchBar,
-  addUserButton,
   userManagementTableColumn,
+  buttonStyles,
+  userStatistics,
 } from './helper';
 import { GET_ALL_USERS } from '../../../apolloClient';
 import {
@@ -23,9 +15,13 @@ import {
   StyledInputBase,
 } from '../adminDashboard/helper';
 import { handleOnTableDataSort } from '../../../config/constant';
+import { content } from './content';
 
-const GenericTable = lazy(() => import('../../../components/table/genericTable'));
-const AddSingleUser = lazy(() => import('./addSingleUser'));
+const GenericTable = lazy(() =>
+  import('../../../components/table/genericTable')
+);
+const AddSingleUser = lazy(() => import('./components/addSingleUser'));
+const UserStatistics = lazy(() => import('./components/userStatistics'));
 
 const EditIcon = () => (
   <Tooltip title="Edit User">
@@ -81,7 +77,10 @@ const UserManagement = () => {
     setUserTableData(data?.getUserData);
   }, [data?.getUserData]);
 
-  const getFilterData = () => data?.getUserData?.filter((element) => element.firstName.toLowerCase().includes(filterData.toLowerCase()));
+  const getFilterData = () =>
+    data?.getUserData?.filter((element) =>
+      element.firstName.toLowerCase().includes(filterData.toLowerCase())
+    );
 
   useEffect(() => {
     refetch();
@@ -89,89 +88,93 @@ const UserManagement = () => {
 
   return (
     <>
-      <h2 style={{ marginLeft: '2rem', fontSize: '2rem' }}>User Management </h2>
-      <Suspense fallback={<div>Loading....</div>}>
+      <Grid container rowSpacing={2.5}>
+        {userStatistics.map(({ title, color, count, extra, percentage }) => (
+          <Grid item xs={11} sm={6} md={4} lg={3}>
+            <UserStatistics
+              title={title}
+              count={count}
+              percentage={percentage}
+              color={color}
+              extra={extra}
+            />
+          </Grid>
+        ))}
+      </Grid>
+
+      <Suspense fallback={<CircularProgress />}>
         <AddSingleUser
           open={isDialogOpen}
           onClose={() => setisDialogOpen(false)}
           onSubmit={() => setisDialogOpen(false)}
         />
       </Suspense>
-      <Suspense fallback={<div>Loading....</div>} />
-      <Grid
-        container
-        direction="row"
-        justifyContent="space-between"
-        alignItems="flex-end"
-      >
-        <Grid item xl="auto">
-          <SearchBar sx={userManagementSearchBar}>
-            <SearchIconWrapper>
-              <Search />
-            </SearchIconWrapper>
-            <StyledInputBase
-              id="outlined-basic"
-              sx={{ borderBottom: '1px solid' }}
-              label="search"
-              variant="outlined"
-              placeholder="User Name"
-              inputProps={{ 'aria-label': 'search' }}
-              onChange={(event) => {
-                setFilterdata(event.target.value.trim());
-              }}
-            />
-          </SearchBar>
-        </Grid>
-        <Grid item xl="auto">
-          <Button
-            variant="contained"
-            style={addUserButton}
-            onClick={() => setisDialogOpen(true)}
-          >
-            Add User
-          </Button>
-        </Grid>
-      </Grid>
-      <Suspense fallback={<div>Loading....</div>}>
-        <Card
+      <Suspense fallback={<CircularProgress />}>
+        <div
           style={{
             display: 'flex',
-            flexDirection: 'column',
-            margin: '1rem 1rem 1rem 1rem',
+            justifyContent: 'space-between',
+            margin: '1rem',
           }}
         >
-          <CardContent>
-            <Typography color="textSecondary" gutterBottom variant="overline">
-              User TABLE
-            </Typography>
-            <GenericTable
-              columns={userManagementTableColumn}
-              data={getFilterData() || userTableData}
-              actions={[
-                {
-                  Icon: EditIcon,
-                  handler: () => setUserEditDialog(true),
-                },
-                {
-                  Icon: DeleteIcon,
-                  handler: () => setUserRemoveDialog(true),
-                },
-              ]}
-              userEditDialog={userEditDialog}
-              userRemoveDialog={userRemoveDialog}
-              handleOnUserEditDialog={() => setUserEditDialog(false)}
-              handleOnUserRemoveDialog={() => setUserRemoveDialog(false)}
-              order={order}
-              orderBy={orderBy}
-              handleOnSort={handleOnSort}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              rowsPerPageOptions={[10, 20, 30]}
-            />
-          </CardContent>
-        </Card>
+          <Typography gutterBottom variant="h5" sx={{ fontWeight: 'bold' }}>
+            {content.USER_TABLE}
+          </Typography>
+          <div style={{ display: 'flex' }}>
+            <SearchBar sx={userManagementSearchBar}>
+              <SearchIconWrapper>
+                <Search />
+              </SearchIconWrapper>
+              <StyledInputBase
+                id="outlined-basic"
+                label="search"
+                variant="outlined"
+                placeholder={content.USER_NAME}
+                inputProps={{ 'aria-label': 'search' }}
+                onChange={(event) => {
+                  setFilterdata(event.target.value.trim());
+                }}
+              />
+            </SearchBar>
+            <button style={buttonStyles} onClick={() => setisDialogOpen(true)}>
+              {content.ADD_USER}
+            </button>
+          </div>
+        </div>
+        <div
+          style={{
+            margin: '1rem',
+            border: '1px solid #BDBDBD',
+            borderRadius: '5px',
+          }}
+        >
+          <GenericTable
+            columns={userManagementTableColumn}
+            data={getFilterData() || userTableData}
+            actions={[
+              {
+                Icon: EditIcon,
+                handler: () => setUserEditDialog(true),
+              },
+              {
+                Icon: DeleteIcon,
+                handler: () => setUserRemoveDialog(true),
+              },
+            ]}
+            userEditDialog={userEditDialog}
+            userRemoveDialog={userRemoveDialog}
+            handleOnUserEditDialog={() => setUserEditDialog(false)}
+            handleOnUserRemoveDialog={() => setUserRemoveDialog(false)}
+            order={order}
+            orderBy={orderBy}
+            handleOnSort={handleOnSort}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPageOptions={[10, 20, 30]}
+          />
+        </div>
       </Suspense>
       <br />
     </>

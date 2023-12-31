@@ -10,6 +10,7 @@ import {
   TableCell,
   TableSortLabel,
   Button,
+  CircularProgress,
 } from '@mui/material';
 import { tableStyle } from './style';
 
@@ -43,7 +44,7 @@ const GenericTable = (props) => {
 
   return (
     <>
-      <Suspense fallback={<div>Loading......</div>}>
+      <Suspense fallback={<CircularProgress />}>
         <EditUser
           userEditDialog={userEditDialog}
           onClose={handleOnUserEditDialog}
@@ -51,7 +52,7 @@ const GenericTable = (props) => {
           data={oldData}
         />
       </Suspense>
-      <Suspense fallback={<div>Loading......</div>}>
+      <Suspense fallback={<CircularProgress />}>
         <DeleteUser
           userRemoveDialog={userRemoveDialog}
           onClose={handleOnUserRemoveDialog}
@@ -60,7 +61,7 @@ const GenericTable = (props) => {
         />
       </Suspense>
       <TableContainer style={tableStyle.tableContainer}>
-        <Table style={tableStyle.table}>
+        <Table>
           <TableHead>
             <TableRow>
               {columns.map(({ label, value }, i) => (
@@ -74,7 +75,7 @@ const GenericTable = (props) => {
                     direction={orderBy === value ? order : 'asc'}
                     onClick={() => handleOnSort(value)}
                   >
-                    {label}
+                    <b style={{color: 'black'}}>{label}</b>
                   </TableSortLabel>
                 </TableCell>
               ))}
@@ -83,7 +84,7 @@ const GenericTable = (props) => {
           <TableBody
             sx={{
               '& .MuiTableRow-root:hover': {
-                backgroundColor: '#DCDCDC',
+                backgroundColor: '#f2f2f2',
               },
             }}
           >
@@ -92,11 +93,6 @@ const GenericTable = (props) => {
               .map((dataItem, index) => (
                 <TableRow
                   align="center"
-                  sx={
-                    index % 2
-                      ? { background: 'white' }
-                      : { background: '#F0F0F0' }
-                  }
                   key={`data${index+1}`}
                   onClick={() =>
                     (dataItem?.url)

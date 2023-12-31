@@ -47,22 +47,22 @@ class UserAPI extends RESTDataSource {
     }
   };
 
-  updateUserData = async (input) => {
+  updateUser = async (input) => {
     try {
       const { originalId } = input;
       return await this.put(`/${originalId}`, input);
     } catch (error) {
-      console.log('CATCH BLOCK : DataSource : UserAPI : updateUserData =>', error);
+      console.log('CATCH BLOCK : DataSource : UserAPI : updateUser =>', error);
       throw error;
     }
   };
 
-  deletedUser = async (input) => {
+  deleteUser = async (input) => {
     try {
       const { originalId } = input;
       return await this.delete(`/${originalId}`);
     } catch (error) {
-      console.log('CATCH BLOCK : DataSource : UserAPI : deletedUser =>', error);
+      console.log('CATCH BLOCK : DataSource : UserAPI : deleteUser =>', error);
       throw error;
     }
   };
