@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const LOGIN = gql`
   mutation Login($input: login) {
@@ -39,13 +39,18 @@ export const REGISTER_USER = gql`
 `;
 
 export const DELETE_USER = gql`
-  mutation Mutation($input: deletedUser) {
-    deletedUser(input: $input) {
-      message
+  mutation DeleteUserData($input: deleteUser) {
+    deleteUser(input: $input) {
       data {
         originalId
+        createdAt
+        deletedAt
+        firstName
+        lastName
+        email
+        password
+        role
       }
-      status
     }
   }
 `;
@@ -55,12 +60,13 @@ export const UPDATE_USER = gql`
     updateUserData(input: $input) {
       data {
         originalId
-        name
+        createdAt
+        deletedAt
+        firstName
+        lastName
         email
-        contactNo
-        department
-        location
-        empId
+        password
+        role
       }
     }
   }

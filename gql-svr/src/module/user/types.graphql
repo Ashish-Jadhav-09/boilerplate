@@ -34,15 +34,20 @@ type user {
   website: String
 }
 
+input deleteUser {
+  originalId: String
+}
+
 input UsersData  {
+  originalId: String
   firstName: String
   lastName: String
   email: String
   password: String
   role: String
-  contactNo?: String
-  bio?: String
-  website?: String
+  contactNo: String
+  bio: String
+  website: String
 }
 
 type User {

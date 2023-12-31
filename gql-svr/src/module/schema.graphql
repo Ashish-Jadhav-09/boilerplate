@@ -6,6 +6,8 @@ type Query {
 type Mutation {
   login(input: login): loginUser
   registerUser(input: UsersData): users
+  updateUser(input: UsersData): users
+  deleteUser(input: deleteUser): users
 }
 
 type Subscription {

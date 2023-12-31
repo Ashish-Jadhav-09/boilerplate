@@ -4,12 +4,13 @@ const UPDATE_USER_DATA_SUBSCRIPTION = gql`
   subscription UserUpdated {
     userUpdated {
       originalId
-      name
+      createdAt
+      deletedAt
+      firstName
+      lastName
       email
-      contactNo
-      department
-      location
-      empId
+      password
+      role
     }
   }
 `;
