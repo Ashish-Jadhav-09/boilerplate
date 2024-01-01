@@ -13,8 +13,11 @@ import { useQuery } from "@apollo/client";
 import { GET_PROFILE } from "../../apolloClient";
 import { StyledAvatar, StyledPaper } from "./helper";
 import { content } from "./content";
+import { useThemeContext } from "../../context/theme/themeContext";
+import { colors } from "../../config/constant";
 
 const UserProfile = () => {
+  const { darkMode } = useThemeContext();
   const { data = {}, loading } = useQuery(GET_PROFILE, {
     fetchPolicy: "network-only",
   });
@@ -44,7 +47,7 @@ const UserProfile = () => {
 
   return (
     <div>
-      <StyledPaper>
+      <StyledPaper darkMode={darkMode}>
         <IconButton
           style={{ position: "absolute", top: 0, right: 0 }}
           onClick={handleEditClick}
@@ -187,8 +190,7 @@ const UserProfile = () => {
                   </Typography>
                   <Stack spacing={1}>
                     <Typography variant="body1">
-                      <strong>{content.EMAIL_LABEL}</strong>{" "}
-                      {profile?.email}
+                      <strong>{content.EMAIL_LABEL}</strong> {profile?.email}
                     </Typography>
                     <Typography variant="body1">
                       <strong>{content.CONTACT_NO}</strong> {profile?.contactNo}
@@ -216,6 +218,7 @@ const UserProfile = () => {
                   fullWidth
                   style={{
                     marginRight: "10px",
+                    backgroundColor: darkMode ? colors.darkSecondaryBackgroundColor : colors.primaryMain,
                   }}
                 >
                   {content.SAVE}
@@ -224,6 +227,10 @@ const UserProfile = () => {
                   variant="outlined"
                   onClick={handleCancelClick}
                   fullWidth
+                  style={{
+                    color: darkMode ? colors.textLight : colors.primaryMain,
+                    borderColor: darkMode ? colors.darkSecondaryBackgroundColor : colors.primaryMain,
+                  }}
                 >
                   {content.CANCEL}
                 </Button>

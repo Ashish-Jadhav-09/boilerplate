@@ -7,21 +7,26 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Switch,
   Toolbar,
   Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useLocation } from "react-router-dom";
 import { content } from "./content";
 import { adminPages, constants, userPages } from "../../config/constant";
 import { welcomeCss, welcomeMobileCss } from "./helper";
+import { useThemeContext } from "../../context/theme";
 import "./styles.css";
 
 const Profile = lazy(() => import("./menuSection"));
 const Notification = lazy(() => import("./notification"));
 
 const NavBar = () => {
+  const { darkMode, toggleTheme } = useThemeContext();
+  const theme = useTheme();
   const location = useLocation();
   const currentPath = location.pathname;
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -34,14 +39,12 @@ const NavBar = () => {
     setAnchorElNav(null);
   };
 
-  console.log("currentPath", currentPath);
-
   return (
     <AppBar
       component="nav"
       style={{
-        backgroundColor: "black",
-        color: "white",
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.text.primary,
       }}
     >
       <Container maxWidth="xl">
@@ -91,7 +94,7 @@ const NavBar = () => {
                         component="div"
                         style={{
                           color:
-                              element.url === currentPath ? "#1976D2" : "white",
+                              element.url === currentPath ? "black" : "white",
                           textDecoration: "none",
                           textAlign: "center",
                         }}
@@ -114,7 +117,7 @@ const NavBar = () => {
                         component="div"
                         style={{
                           color:
-                              element.url === currentPath ? "#1976D2" : "white",
+                              element.url === currentPath ? "black" : "white",
                           textDecoration: "none",
                           textAlign: "center",
                         }}
@@ -146,7 +149,7 @@ const NavBar = () => {
                       component="div"
                       style={{
                         color:
-                            element.url === currentPath ? "#1976D2" : "white",
+                            element.url === currentPath ? "black" : "white",
                         textDecoration: "none",
                         textAlign: "center",
                       }}
@@ -167,7 +170,7 @@ const NavBar = () => {
                       component="div"
                       style={{
                         color:
-                            element.url === currentPath ? "#1976D2" : "white",
+                            element.url === currentPath ? "black" : "white",
                         textDecoration: "none",
                         textAlign: "center",
                       }}
@@ -179,6 +182,13 @@ const NavBar = () => {
                 </MenuItem>
               ))}
           </Box>
+          <Switch
+            style={{
+              color: theme.palette.background.default,
+            }}
+            checked={darkMode}
+            onChange={toggleTheme}
+          />
           <Suspense fallback={<CircularProgress />}>
             <Notification />
           </Suspense>

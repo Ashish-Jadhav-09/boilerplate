@@ -10,21 +10,26 @@ import {
   DialogActions,
   Button,
   InputAdornment,
-  Divider,
 } from "@mui/material";
-import { useMutation } from "@apollo/client";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
-import { editUserCancelButton, editUserSubmitButton } from "./style";
-import { editUserValidationSchema } from "./helper";
+import {
+  editUserValidationSchema,
+  getCancelButtonCss,
+  getSubmitButtonCss,
+} from "./helper";
 import { useSnackbar } from "../../context";
 import { UPDATE_USER } from "../../apolloClient";
+import { useThemeContext } from "../../context/theme/themeContext";
+import { useMutation } from "@apollo/client";
+import { content } from "./content";
 
 const EditUser = (props) => {
   const { userEditDialog, onClose, onSubmit, data = {} } = props;
 
   const snackBar = useSnackbar();
   const [updateUser, { loading }] = useMutation(UPDATE_USER);
+  const { darkMode } = useThemeContext();
 
   let initialState = {
     firstName: "",
@@ -113,10 +118,9 @@ const EditUser = (props) => {
           "success"
         );
         onSubmit();
-        snackBar("Successfully Edited User", "success");
       })
       .catch((err) => {
-        console.log("CATCH BLOCK : in EditDialog.js .then => ", err);
+        console.error("Error in handleOnSubmit:", err);
         onSubmit();
       });
   };
@@ -140,9 +144,9 @@ const EditUser = (props) => {
 
   return (
     <Dialog open={userEditDialog}>
-      <DialogTitle>Edit user</DialogTitle>
+      <DialogTitle>{content.EDIT_USER}</DialogTitle>
       <DialogContent>
-        <DialogContentText>Enter your User Details</DialogContentText>
+        <DialogContentText>{content.EDIT_USER_DETAILS}</DialogContentText>
         <Grid container>
           <Grid item xs={11.64}>
             <TextField
@@ -165,7 +169,7 @@ const EditUser = (props) => {
               onBlur={(event) => {
                 handleOnBlur(event, "firstName");
               }}
-              helperText={() => getError("firstName")}
+              helperText={getError("firstName")}
             />
           </Grid>
           <Grid item xs={11.64}>
@@ -189,7 +193,7 @@ const EditUser = (props) => {
               onBlur={(event) => {
                 handleOnBlur(event, "lastName");
               }}
-              helperText={() => getError("lastName")}
+              helperText={getError("lastName")}
             />
           </Grid>
           <Grid item xs={11.64}>
@@ -218,12 +222,9 @@ const EditUser = (props) => {
           </Grid>
         </Grid>
       </DialogContent>
-      <DialogActions>
-        <Button sx={editUserCancelButton} onClick={onClose}>
-          Cancel
-        </Button>
+      <DialogActions style={{ display: "flex", flexDirection: "row" }}>
         <Button
-          sx={editUserSubmitButton}
+          sx={getSubmitButtonCss(darkMode)}
           variant="contained"
           loading={loading}
           onClick={() => handleOnSubmit(data?.originalId)}
@@ -234,9 +235,11 @@ const EditUser = (props) => {
               data?.lastName === lastName)
           }
         >
-          Submit
+          {content.SUBMIT_BUTTON}
         </Button>
-        <Divider />
+        <Button sx={getCancelButtonCss(darkMode)} onClick={onClose}>
+          {content.CANCEL_BUTTON}
+        </Button>
       </DialogActions>
     </Dialog>
   );

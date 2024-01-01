@@ -105,7 +105,10 @@ const Login = () => {
         },
       });
       if (output?.data?.login?.data) {
-        localStorage.setItem("accessToken", output.data.login.data.token);
+        localStorage.setItem(
+          constants.accessToken,
+          output.data.login.data.token
+        );
         localStorage.setItem(
           constants.user,
           JSON.stringify(output.data.login.data.user)
@@ -133,7 +136,7 @@ const Login = () => {
 
   useEffect(() => {
     if (
-      localStorage.getItem("accessToken") &&
+      localStorage.getItem(constants.accessToken) &&
       localStorage.getItem(constants.user)
     ) {
       navigation(

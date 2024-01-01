@@ -1,14 +1,15 @@
-import React, { useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Snackbar, Alert, Stack } from '@mui/material';
-import { SnackbarContext } from './snackBarContext';
+import React, { useCallback, useState } from "react";
+import PropTypes from "prop-types";
+import { Snackbar, Alert, Stack, useTheme } from "@mui/material";
+import { SnackbarContext } from "./snackBarContext";
 
 const SnackBarProvider = ({ children }) => {
+  const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState('This is default');
-  const [messageType, setMessageType] = useState('success');
+  const [message, setMessage] = useState("This is default");
+  const [messageType, setMessageType] = useState("success");
 
-  const CloseSnackBar = () => {
+  const closeSnackBar = () => {
     setOpen(false);
   };
 
@@ -20,14 +21,21 @@ const SnackBarProvider = ({ children }) => {
 
   return (
     <SnackbarContext.Provider value={openSnackBar}>
-      <Stack spacing={2} sx={{ width: '1085' }}>
-        <Snackbar open={open} autoHideDuration={3000} onClose={CloseSnackBar}>
+      <Stack spacing={2} sx={{ width: "100%" }}>
+        <Snackbar open={open} autoHideDuration={3000} onClose={closeSnackBar}>
           <Alert
             variant="filled"
-            onClose={CloseSnackBar}
+            onClose={closeSnackBar}
             severity={messageType}
             autoHideDuration={2000}
-            sx={{ width: 500 }}
+            sx={{
+              width: "100%",
+              backgroundColor:
+                theme.palette[messageType].main || theme.palette.success.main,
+              color:
+                theme.palette[messageType].contrastText ||
+                theme.palette.success.contrastText,
+            }}
           >
             {message}
           </Alert>

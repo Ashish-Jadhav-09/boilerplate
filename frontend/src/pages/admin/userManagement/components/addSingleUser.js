@@ -10,6 +10,7 @@ import {
   InputAdornment,
   Divider,
   Button,
+  useTheme,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import PersonIcon from '@mui/icons-material/Person';
@@ -18,16 +19,19 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useMutation } from '@apollo/client';
 import { REGISTER_USER } from '../../../../apolloClient/mutation';
 import {
-  addUserCancelButton,
   addUserState,
-  addUserSubmitButton,
   addUserValidationSchema,
+  getAddUserCancelButtonStyles,
+  getAddUserSubmitButtonStyles,
 } from '../helper';
-import { useSnackbar } from '../../../../context';
+import { useSnackbar, useThemeContext } from '../../../../context';
 import { content } from '../content';
 
 const AddSingleUser = (props) => {
   const { onClose, onSubmit, open } = props;
+
+  const theme = useTheme();
+  const { darkMode } = useThemeContext();
   const [registerUser] = useMutation(REGISTER_USER);
   const snackBar = useSnackbar();
 
@@ -231,11 +235,14 @@ const AddSingleUser = (props) => {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button sx={addUserCancelButton} onClick={() => handleOnCancel()}>
+        <Button
+          sx={getAddUserCancelButtonStyles(theme, darkMode)}
+          onClick={() => handleOnCancel()}
+        >
           {content.CANCEL_BUTTON}
         </Button>
         <Button
-          sx={addUserSubmitButton}
+          sx={getAddUserSubmitButtonStyles(theme, darkMode)}
           variant="contained"
           onClick={() => handleOnSubmit()}
           disabled={isDisabled}

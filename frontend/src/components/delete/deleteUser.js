@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import {
   Dialog,
   DialogContent,
@@ -7,18 +7,18 @@ import {
   DialogTitle,
   Button,
   DialogActions,
-} from '@mui/material';
-import { useMutation } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
-import { DELETE_USER } from '../../apolloClient/mutation';
-import { useSnackbar } from '../../context';
-import { cancelButton, deleteButton } from './helper';
-import { content } from './content';
-import { constants } from '../../config/constant';
+} from "@mui/material";
+import { useMutation } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
+import { DELETE_USER } from "../../apolloClient/mutation";
+import { useSnackbar, useThemeContext } from "../../context";
+import { constants } from "../../config/constant";
+import { content } from "./content";
+import { getSubmitButtonCss, getCancelButtonCss } from "./helper";
 
 const DeleteUser = (props) => {
   const { onClose, userRemoveDialog, data, onSubmit } = props;
-
+  const { darkMode } = useThemeContext();
   const [deletedUser] = useMutation(DELETE_USER);
   const snackBar = useSnackbar();
   const navigate = useNavigate();
@@ -43,25 +43,19 @@ const DeleteUser = (props) => {
       onSubmit();
       setLoading(false);
     } catch (err) {
-      console.log('CATCH BLOCK : in RemoveDialog.jsx .then => ', err);
+      console.log("CATCH BLOCK : deleteUser.js : handleOnSubmit => ", err);
       snackBar(content.USER_DELETE_ERROR_TOAST, constants.error);
     }
   };
 
   useEffect(() => {
-    if (localStorage.getItem('accessToken')) {
+    if (localStorage.getItem(constants.accessToken)) {
       setAuthenticated(true);
     }
   }, [navigate, authenticated]);
 
   return (
-    <Dialog
-      sx={{
-        backgroundColor: 'rgba(255,255,255,0.6)',
-      }}
-      open={userRemoveDialog}
-      onClose={onClose}
-    >
+    <Dialog open={userRemoveDialog} onClose={onClose}>
       <DialogTitle>{content.DELETE_USER}</DialogTitle>
       <DialogContent>
         <DialogContentText>
@@ -69,16 +63,20 @@ const DeleteUser = (props) => {
         </DialogContentText>
         <br />
         <DialogActions>
-          <Button sx={cancelButton} onClick={onClose}>
-            {content.CANCEL}
-          </Button>
           <Button
             variant="contained"
             loading={loading}
             onClick={() => handleOnSubmit(data.originalId)}
-            sx={deleteButton}
+            sx={getSubmitButtonCss(darkMode)}
           >
             {content.DELETE}
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={onClose}
+            sx={getCancelButtonCss(darkMode)}
+          >
+            {content.CANCEL}
           </Button>
         </DialogActions>
       </DialogContent>

@@ -1,13 +1,18 @@
 import React from "react";
 import { Box, Card, CircularProgress, Grid, Typography } from "@mui/material";
-// import Chart from "../../../components/chart/chart";
+import Chart from "../../../components/chart/chart";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_USERS } from "../../../apolloClient";
+import { useThemeContext } from "../../../context/theme/themeContext";
+import { content } from "./content";
+import { getChartOptions } from "./helper";
+import { constants } from "../../../config/constant";
 
 const AdminDashboard = () => {
+  const { darkMode } = useThemeContext();
   const { data = {}, loading } = useQuery(GET_ALL_USERS, {
     variables: {
-      role: "general",
+      role: constants.general,
     },
     fetchPolicy: "network-only",
   });
@@ -32,46 +37,19 @@ const AdminDashboard = () => {
         <Grid item xs={12} md={7} lg={8}>
           <Grid item>
             <Typography variant="h7">
-              {"User Registration Trend Chart"}
+              {content.USER_REGISTRATION_TREND_CHART}
             </Typography>
           </Grid>
           <Grid container alignItems="center" justifyContent="space-between">
             <Card sx={{ mt: 1.5, border: "1px solid #EEF1F5" }}>
-              <Box sx={{ pt: 1, pr: 2 }}>
-                {/* <Chart
-                  options={{
-                    chart: {
-                      height: 450,
-                      type: "line",
-                      zoom: {
-                        enabled: false,
-                      },
-                    },
-                    dataLabels: {
-                      enabled: false,
-                    },
-                    stroke: {
-                      curve: "smooth",
-                      width: 1.5,
-                    },
-                    title: {
-                      align: "left",
-                    },
-                    grid: {
-                      row: {
-                        colors: ["#f3f3f3", "transparent"],
-                        opacity: 0.5,
-                      },
-                    },
-                    xaxis: {
-                      categories: Object.keys(groupedData),
-                    },
-                  }}
+              <Box>
+                <Chart
+                  options={getChartOptions(darkMode, groupedData)}
                   series={[{ data: Object.values(groupedData) }]}
                   type="line"
                   height={450}
                   width={450}
-                /> */}
+                />
               </Box>
             </Card>
           </Grid>

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { CircularProgress, Grid, Tooltip, Typography } from '@mui/material';
+import { CircularProgress, Grid, Tooltip, Typography, useTheme } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import { Edit, Delete, Search } from '@mui/icons-material';
 import {
-  userManagementSearchBar,
   userManagementTableColumn,
-  buttonStyles,
   userStatistics,
+  getUserManagementSearchBarStyles,
+  getButtonStyles,
 } from './helper';
 import { GET_ALL_USERS } from '../../../apolloClient';
 import {
@@ -16,6 +16,7 @@ import {
 } from '../adminDashboard/helper';
 import { handleOnTableDataSort } from '../../../config/constant';
 import { content } from './content';
+import { useThemeContext } from '../../../context';
 
 const GenericTable = lazy(() =>
   import('../../../components/table/genericTable')
@@ -36,6 +37,9 @@ const DeleteIcon = () => (
 );
 
 const UserManagement = () => {
+  const theme = useTheme();
+  const { darkMode } = useThemeContext();
+
   const [userTableData, setUserTableData] = useState([]);
   const [isDialogOpen, setisDialogOpen] = useState(false);
   const [userEditDialog, setUserEditDialog] = useState(false);
@@ -90,7 +94,7 @@ const UserManagement = () => {
     <>
       <Grid container rowSpacing={2.5}>
         {userStatistics.map(({ title, color, count, extra, percentage }) => (
-          <Grid item xs={11} sm={6} md={4} lg={3}>
+          <Grid key={title} item xs={11} sm={6} md={4} lg={3}>
             <UserStatistics
               title={title}
               count={count}
@@ -101,7 +105,6 @@ const UserManagement = () => {
           </Grid>
         ))}
       </Grid>
-
       <Suspense fallback={<CircularProgress />}>
         <AddSingleUser
           open={isDialogOpen}
@@ -121,7 +124,7 @@ const UserManagement = () => {
             {content.USER_TABLE}
           </Typography>
           <div style={{ display: 'flex' }}>
-            <SearchBar sx={userManagementSearchBar}>
+            <SearchBar sx={getUserManagementSearchBarStyles(theme, darkMode)}>
               <SearchIconWrapper>
                 <Search />
               </SearchIconWrapper>
@@ -136,7 +139,10 @@ const UserManagement = () => {
                 }}
               />
             </SearchBar>
-            <button style={buttonStyles} onClick={() => setisDialogOpen(true)}>
+            <button
+              style={getButtonStyles(theme, darkMode)}
+              onClick={() => setisDialogOpen(true)}
+            >
               {content.ADD_USER}
             </button>
           </div>
@@ -144,7 +150,9 @@ const UserManagement = () => {
         <div
           style={{
             margin: '1rem',
-            border: '1px solid #BDBDBD',
+            border: `1px solid ${
+              darkMode ? theme.palette.divider : '#BDBDBD'
+            }`,
             borderRadius: '5px',
           }}
         >

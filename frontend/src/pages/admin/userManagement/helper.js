@@ -1,45 +1,54 @@
-import * as yup from 'yup';
+import * as yup from "yup";
+import { colors } from "../../../config/constant";
 
-export const userManagementSearchBar = {
-  left: '10px',
-  backgroundColor: '#f2f2f2',
-  borderRadius: '5px',
-  border: '1px solid #e6e6e6'
-};
+export const getUserManagementSearchBarStyles = (theme, darkMode) => ({
+  left: "10px",
+  backgroundColor: theme.palette.background.paper,
+  borderRadius: "5px",
+  border: `1px solid ${
+    darkMode ? theme.palette.divider : '#BDBDBD'
+  }`,
+});
 
-export const buttonStyles = {
-  marginLeft: '20px',
-  padding: '5px 15px',
-  backgroundColor: 'white',
-  color: 'black',
-  border: 'none',
-  borderRadius: '5px',
-  fontSize: '16px',
-  cursor: 'pointer',
-  boxShadow: '0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12)',
-};
+export const getButtonStyles = (theme, darkMode) => ({
+  marginLeft: "20px",
+  padding: "5px 15px",
+  backgroundColor: theme.palette.background.paper,
+  color: darkMode ? theme.palette.common.white : theme.palette.text.primary,
+  border: `1px solid ${
+    darkMode ? theme.palette.divider : '#BDBDBD'
+  }`,
+  borderRadius: "5px",
+  fontSize: "16px",
+  cursor: "pointer",
+});
 
-export const addUserCancelButton = {
-  mb: '10px',
-  color: 'black',
-  borderColor: '#0063cc',
-  '&:hover': {
-    color: 'black',
-    backgroundColor: '#f2f2f2',
+export const getAddUserCancelButtonStyles = (theme, darkMode) => ({
+  mb: "10px",
+  color: darkMode ? theme.palette.common.white : theme.palette.text.primary,
+  borderColor: theme.palette.primary.main,
+  "&:hover": {
+    color: darkMode ? theme.palette.common.white : theme.palette.text.primary,
+    backgroundColor: theme.palette.background.paper,
   },
-};
+});
 
-export const addUserSubmitButton = {
-  mr: '25px',
-  mb: '10px',
-  backgroundColor: 'black',
-  borderColor: '#0063cc',
-  '&:hover': {
-    color: 'white',
-    backgroundColor: 'black',
-    borderColor: 'black',
+export const getAddUserSubmitButtonStyles = (theme, darkMode) => ({
+  mr: "25px",
+  mb: "10px",
+  backgroundColor: darkMode
+    ? colors.darkSecondaryBackgroundColor
+    : colors.secondaryMain,
+  color: colors.textLight,
+  borderColor: darkMode ? colors.primaryMain : "#0063cc",
+  "&:hover": {
+    color: theme.palette.background.paper,
+    backgroundColor: darkMode
+      ? colors.darkSecondaryBackgroundColor
+      : colors.secondaryMain,
+    borderColor: darkMode ? colors.primaryMain : colors.secondaryMain,
   },
-};
+});
 
 export const userManagementTableColumn = [
   {

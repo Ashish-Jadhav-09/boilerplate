@@ -16,9 +16,9 @@ export const routes = {
   PROFILE: "/profile",
   SUPPORT: "/support",
   ACCOUNT_SETTINGS: "/account-settings",
-  LOGIN: '/',
-  REGISTER_USER: '/register-user',
-  NOT_FOUND_ROUTE: '/*',
+  LOGIN: "/",
+  REGISTER_USER: "/register-user",
+  NOT_FOUND_ROUTE: "/*",
 };
 
 export const adminPages = [
@@ -45,4 +45,22 @@ export const constants = {
   general: "general",
   success: "success",
   error: "error",
+  accessToken: "accessToken",
+  darkMode: "darkMode",
+  dark: "dark",
+  light: "light",
+};
+
+export const colors = {
+  primaryMain: "#2788D1",
+  secondaryMain: "#000000",
+  textDark: "#FFFFFF",
+  textLight: "#000000",
+  backgroundDarkDefault: "#101418",
+  backgroundLightDefault: "#F1F1F4",
+  backgroundDarkPaper: "#1E1E1E",
+  backgroundLightPaper: "#FFFFFF",
+  darkSecondaryBackgroundColor: "#1A2027",
+  dividerDark: "#2c2c2c",
+  dividerLight: "#e0e0e0",
 };
