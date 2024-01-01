@@ -4,11 +4,12 @@ import {
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import config from '../config/config';
+import { constants } from '../config/constant';
 
 const httpLink = new HttpLink({
   uri: config.graphql_uri,
   headers: {
-    authorization: localStorage.getItem('accessToken'),
+    authorization: localStorage.getItem(constants.accessToken),
   },
 });
 

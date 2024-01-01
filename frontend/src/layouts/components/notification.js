@@ -51,17 +51,20 @@ const Notification = () => {
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 0.75 }}>
+    <Box sx={{ flexShrink: 0, ml: 0.75, mr: 1.5 }}>
       <IconButton
         disableRipple
-        color="secondary"
-        sx={{
-          color: "white",
-        }}
         ref={anchorRef}
         onClick={handleToggle}
       >
-        <Badge badgeContent={4} color="primary">
+        <Badge
+          badgeContent={4}
+          color="secondary"
+          variant="standard"
+          style={{
+            color: theme.palette.background.default,
+          }}
+        >
           <Notifications />
         </Badge>
       </IconButton>
@@ -99,16 +102,12 @@ const Notification = () => {
                           notificationSecondaryText,
                           notificationText,
                           notificationTime,
-                          sx
+                          sx,
                         }) => (
                           <>
                             <ListItemButton>
                               <ListItemAvatar>
-                                <Avatar
-                                  sx={sx}
-                                >
-                                  {AvtarIcon}
-                                </Avatar>
+                                <Avatar sx={sx}>{AvtarIcon}</Avatar>
                               </ListItemAvatar>
                               <ListItemText
                                 primary={notificationText}

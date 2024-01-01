@@ -1,71 +1,61 @@
-import React, { lazy, useState } from "react";
-import { Paper, Grid, Typography } from "@mui/material";
-import { adminTableColumn } from "../admin/adminDashboard/helper";
-import { handleOnTableDataSort } from "../../config/constant";
-
-const GenericTable = lazy(() => import("../../components/table/genericTable"));
+import React from "react";
+import { Box, Card, CircularProgress, Grid, Typography } from "@mui/material";
+import { useQuery } from "@apollo/client";
+import { content } from "./content";
+import { useThemeContext } from "../../context/theme/themeContext";
+import { GET_ALL_USERS } from "../../apolloClient";
+import { constants } from "../../config/constant";
+import Chart from "../../components/chart/chart";
+import { getChartOptions } from "../admin/adminDashboard/helper";
 
 const Dashboard = () => {
-  const tableData = [
-    {
-      activity: "Log in",
-      timestamp: "2023-10-15 09:30:00",
-      user: "John Doe",
+  const { darkMode } = useThemeContext();
+  const { data = {}, loading } = useQuery(GET_ALL_USERS, {
+    variables: {
+      role: constants.general,
     },
-    {
-      activity: "Create a post",
-      timestamp: "2023-10-15 10:15:00",
-      user: "Alice Smith",
-    },
-    {
-      activity: "Log out",
-      timestamp: "2023-10-15 11:45:00",
-      user: "Bob Johnson",
-    },
-  ];
+    fetchPolicy: "network-only",
+  });
 
-  const [order, setSortOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("status");
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [activityLogData, setActivityLogData] = useState(tableData);
+  const groupedData = (data?.getUserData || []).reduce((acc, { createdAt }) => {
+    const dateKey = createdAt?.split("T")[0];
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(event.target.value, 10);
-    setPage(0);
-  };
-
-  const handleOnSort = (value) => {
-    setOrderBy(value);
-    const tableDataSort = handleOnTableDataSort(orderBy, order);
-    activityLogData.sort(tableDataSort);
-    if (order === "asc") {
-      setSortOrder("desc");
-    } else {
-      setSortOrder("asc");
+    if (dateKey) {
+      acc[dateKey] = (acc[dateKey] || 0) + 1;
     }
-  };
+
+    return acc;
+  }, {});
+
+  if (loading) {
+    return <CircularProgress />;
+  }
 
   return (
-    <>
-      <Typography variant="h6">Activity Feed</Typography>
-      <GenericTable
-        columns={adminTableColumn}
-        data={activityLogData || []}
-        order={order}
-        orderBy={orderBy}
-        handleOnSort={handleOnSort}
-        page={page}
-        onPageChange={handleChangePage}
-        rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        rowsPerPageOptions={[10, 20, 30]}
-      />
-    </>
+    <div style={{ margin: "2rem" }}>
+      <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+        <Grid item xs={12} md={7} lg={8}>
+          <Grid item>
+            <Typography variant="h7">
+              {content.USER_REGISTRATION_TREND_CHART}
+            </Typography>
+          </Grid>
+          <Grid container alignItems="center" justifyContent="space-between">
+            <Card sx={{ mt: 1.5, border: "1px solid #EEF1F5" }}>
+              <Box>
+                <Chart
+                  options={getChartOptions(darkMode, groupedData)}
+                  series={[{ data: Object.values(groupedData) }]}
+                  type="line"
+                  height={450}
+                  width={450}
+                />
+              </Box>
+            </Card>
+          </Grid>
+        </Grid>
+      </Grid>
+    </div>
   );
 };
 

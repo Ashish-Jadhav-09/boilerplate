@@ -1,5 +1,5 @@
-import React, { lazy, Suspense, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { lazy, Suspense, useState } from "react";
+import PropTypes from "prop-types";
 import {
   Table,
   TableContainer,
@@ -10,14 +10,18 @@ import {
   TableCell,
   TableSortLabel,
   Button,
+  useTheme,
   CircularProgress,
-} from '@mui/material';
-import { tableStyle } from './style';
+} from "@mui/material";
+import { getTableStyles } from "./style";
 
-const EditUser = lazy(() => import('../edit/editUser'));
-const DeleteUser = lazy(() => import('../delete/deleteUser'));
+const EditUser = lazy(() => import("../edit/editUser"));
+const DeleteUser = lazy(() => import("../delete/deleteUser"));
 
 const GenericTable = (props) => {
+  const theme = useTheme();
+  const tableStyles = getTableStyles(theme);
+
   const {
     data,
     actions,
@@ -60,22 +64,22 @@ const GenericTable = (props) => {
           data={oldData}
         />
       </Suspense>
-      <TableContainer style={tableStyle.tableContainer}>
-        <Table>
+      <TableContainer style={tableStyles.tableContainer}>
+        <Table style={tableStyles.table}>
           <TableHead>
             <TableRow>
               {columns.map(({ label, value }, i) => (
                 <TableCell
                   align="center"
-                  style={tableStyle.tableCell}
-                  key={`columns${i+1}`}
+                  style={tableStyles.tableCell}
+                  key={`columns${i + 1}`}
                 >
                   <TableSortLabel
                     active={orderBy === value}
-                    direction={orderBy === value ? order : 'asc'}
+                    direction={orderBy === value ? order : "asc"}
                     onClick={() => handleOnSort(value)}
                   >
-                    <b style={{color: 'black'}}>{label}</b>
+                    {label}
                   </TableSortLabel>
                 </TableCell>
               ))}
@@ -83,8 +87,8 @@ const GenericTable = (props) => {
           </TableHead>
           <TableBody
             sx={{
-              '& .MuiTableRow-root:hover': {
-                backgroundColor: '#f2f2f2',
+              "& .MuiTableRow-root:hover": {
+                backgroundColor: theme.palette.action.hover,
               },
             }}
           >
@@ -93,29 +97,26 @@ const GenericTable = (props) => {
               .map((dataItem, index) => (
                 <TableRow
                   align="center"
-                  key={`data${index+1}`}
+                  style={tableStyles.tableRow}
+                  key={`data${index + 1}`}
                   onClick={() =>
-                    (dataItem?.url)
-                      ? window.open(
-                        dataItem?.url,
-                        '_blank',
-                        'noreferrer'
-                      )
-                      : ''
+                    dataItem?.url
+                      ? window.open(dataItem?.url, "_blank", "noreferrer")
+                      : ""
                   }
                 >
                   {columns.map(({ value, format }, iconColIndex) =>
-                    value === 'Icon' ? (
+                    value === "Icon" ? (
                       <TableCell
-                        style={tableStyle.tableRow}
+                        style={tableStyles.tableRow}
                         align="center"
-                        key={`iconColIndex${iconColIndex+1}`}
+                        key={`iconColIndex${iconColIndex + 1}`}
                       >
                         {actions?.map(({ Icon, handler }, iconIndex) => (
                           <Button
                             color="inherit"
-                            style={{ marginTop: '5px' }}
-                            key={`icon${iconIndex+1}`}
+                            style={{ marginTop: "5px" }}
+                            key={`icon${iconIndex + 1}`}
                             align="center"
                             onClick={() => {
                               handler();
@@ -123,7 +124,7 @@ const GenericTable = (props) => {
                             }}
                           >
                             <Icon
-                              style={{ padding: '10px -1px -2px -1px' }}
+                              style={{ padding: "10px -1px -2px -1px" }}
                               variant="contained"
                               onClick={() => {}}
                               data={dataItem}
@@ -133,7 +134,11 @@ const GenericTable = (props) => {
                         ))}
                       </TableCell>
                     ) : (
-                      <TableCell key={`iconColIndex${iconColIndex+1}`} align="center">
+                      <TableCell
+                        key={`iconColIndex${iconColIndex + 1}`}
+                        align="center"
+                        style={tableStyles.tableRow}
+                      >
                         {format ? format(dataItem[value]) : dataItem[value]}
                       </TableCell>
                     )
@@ -179,8 +184,8 @@ GenericTable.defaultProps = {
   data: [],
   columns: [],
   actions: [],
-  order: 'ase',
-  orderBy: '',
+  order: "ase",
+  orderBy: "",
   page: 0,
   rowsPerPage: 0,
   rowsPerPageOptions: [],

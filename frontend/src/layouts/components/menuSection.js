@@ -20,7 +20,7 @@ import { LogoutOutlined, SettingsOutlined, Person } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { tabCss, tabIconCss, menuPaperCss } from "./helper";
 import { content } from "./content";
-import { constants } from "../../config/constant";
+import { constants, routes } from "../../config/constant";
 
 const ProfileTab = lazy(() => import("./profileSection"));
 const SettingTab = lazy(() => import("./settingsSection"));
@@ -36,8 +36,9 @@ const Profile = () => {
   const [open, setOpen] = useState(false);
 
   const handleLogout = async () => {
-    localStorage.clear();
-    navigate("/", { replace: true });
+    localStorage.removeItem(constants.user);
+    localStorage.removeItem(constants.accessToken);
+    navigate(routes.LOGIN, { replace: true });
   };
 
   const handleClose = (event) => {

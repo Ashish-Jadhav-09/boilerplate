@@ -1,18 +1,22 @@
-import React, { lazy } from 'react';
-import PropTypes from 'prop-types';
-import { Box, Chip, Grid, Stack, Typography } from '@mui/material';
-import { content } from '../content';
+import React, { lazy } from "react";
+import PropTypes from "prop-types";
+import { Box, Chip, Grid, Stack, Typography, useTheme } from "@mui/material";
+import { content } from "../content";
+import { useThemeContext } from "../../../../context";
 
-const MainCard = lazy(() => import('../../../../components/mainCard/mainCard'));
+const MainCard = lazy(() => import("../../../../components/mainCard/mainCard"));
 
 const UserStatistics = ({ color, title, count, percentage, extra }) => {
+  const theme = useTheme();
+  const { darkMode } = useThemeContext();
+
   return (
     <MainCard
       border={false}
       sx={{
-        margin: '1rem',
-        backgroundColor: '#f2f2f2',
-        border: '1px solid #e6e6e6',
+        margin: "1rem",
+        backgroundColor: theme.palette.background.paper,
+        border: `1px solid ${darkMode ? theme.palette.divider : '#BDBDBD'}`,
       }}
       contentSX={{ p: 2.25 }}
     >
@@ -41,14 +45,14 @@ const UserStatistics = ({ color, title, count, percentage, extra }) => {
       </Stack>
       <Box sx={{ pt: 2.25 }}>
         <Typography variant="caption" color="textSecondary">
-          {content.YOU_MADE_EXTRA}{' '}
+          {content.YOU_MADE_EXTRA}{" "}
           <Typography
             component="span"
             variant="caption"
-            sx={{ color: `${color || 'primary'}.main` }}
+            sx={{ color: theme.palette.primary.main }}
           >
             {extra}
-          </Typography>{' '}
+          </Typography>{" "}
           {content.THIS_YEAR}
         </Typography>
       </Box>
@@ -65,11 +69,11 @@ UserStatistics.propTypes = {
 };
 
 UserStatistics.defaultProps = {
-  color: 'primary',
-  title: '',
-  count: '',
+  color: "primary",
+  title: "",
+  count: "",
   percentage: 0,
-  extra: '',
+  extra: "",
 };
 
 export default UserStatistics;

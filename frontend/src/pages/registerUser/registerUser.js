@@ -9,6 +9,7 @@ import {
   InputAdornment,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material";
 import Link from "@mui/material/Link";
 import { useSnackbar } from "../../context";
@@ -23,9 +24,16 @@ import {
   registerUserValidationSchema,
   signUpTitle,
 } from "./helper";
-import { Person, Email, Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  PersonOutline,
+  Email,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
+import { routes } from "../../config/constant";
 
 const RegisterUser = () => {
+  const theme = useTheme();
   const [registerUser] = useMutation(REGISTER_USER);
   const navigation = useNavigate();
   const snackBar = useSnackbar();
@@ -140,7 +148,7 @@ const RegisterUser = () => {
             `${output.data.registerUser.data.firstName} your account has been created successfully`,
             "success"
           );
-          navigation("/", {
+          navigation(routes.LOGIN, {
             replace: true,
           });
         } else {
@@ -156,12 +164,12 @@ const RegisterUser = () => {
   };
 
   return (
-    <Grid container component="main" sx={mainGrid}>
+    <Grid container component="main" sx={mainGrid(theme)}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Box sx={boxCss}>
-          <Box sx={blurBoxCss}>
-            <Typography sx={signUpTitle}>{content.SIGN_UP}</Typography>
+        <Box sx={boxCss(theme)}>
+          <Box sx={blurBoxCss(theme)}>
+            <Typography sx={signUpTitle(theme)}>{content.SIGN_UP}</Typography>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -179,7 +187,7 @@ const RegisterUser = () => {
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="start">
-                        <Person />
+                        <PersonOutline />
                       </InputAdornment>
                     ),
                   }}
@@ -201,7 +209,7 @@ const RegisterUser = () => {
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="start">
-                        <Person />
+                        <PersonOutline />
                       </InputAdornment>
                     ),
                   }}
@@ -312,7 +320,7 @@ const RegisterUser = () => {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/" variant="body2">
+                <Link href={routes.LOGIN} variant="body2">
                   {content.ALREADY_HAVE_ACCOUNT}
                 </Link>
               </Grid>

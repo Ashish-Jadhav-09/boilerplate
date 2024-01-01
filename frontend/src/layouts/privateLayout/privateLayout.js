@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { PropTypes } from "prop-types";
 import { useNavigate } from "react-router";
 import NavBar from "../components/navbar";
-import { Box, Toolbar } from "@mui/material";
+import { Toolbar } from "@mui/material";
+import { constants, routes } from "../../config/constant";
 
 const PrivateLayout = (props) => {
   const { children } = props;
@@ -11,10 +12,10 @@ const PrivateLayout = (props) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("accessToken")) {
+    if (localStorage.getItem(constants.accessToken)) {
       setAuthenticated(true);
     } else {
-      navigate("/", { replace: true });
+      navigate(routes.LOGIN, { replace: true });
     }
   }, [navigate]);
 
@@ -22,10 +23,8 @@ const PrivateLayout = (props) => {
     return (
       <>
         <NavBar />
-        <Box component="main" style={{ backgroundColor: "#FAFAFB" }}>
-          <Toolbar />
-          {children}
-        </Box>
+        <Toolbar />
+        {children}
       </>
     );
   }
